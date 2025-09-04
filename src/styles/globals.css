@@ -1,0 +1,1611 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 14px;
+  
+  /* Capgemini Brand Colors */
+  --capgemini-blue: #0070AD;
+  --capgemini-blue-light: #B3D4EA;
+  --vibrant-blue: #00A3E0;
+  --vibrant-blue-light: #B3E0F7;
+  --deep-purple: #2E1065;
+  --deep-purple-light: #B8A9D9;
+  
+  /* AI Startup Secondary Palette */
+  --ai-teal-01: #4ECDC4;
+  --ai-teal-02: #44A08D;
+  --ai-teal-03: #26D0CE;
+  --ai-teal-04: #1A9C96;
+  --ai-teal-05: #066F6F;
+  
+  --ai-peacock-01: #40E0D0;
+  --ai-peacock-02: #00CED1;
+  --ai-peacock-03: #20B2AA;
+  --ai-peacock-04: #008B8B;
+  --ai-peacock-05: #2F4F4F;
+  
+  --ai-violet-01: #E91E63;
+  --ai-violet-02: #C2185B;
+  --ai-violet-03: #AD1457;
+  --ai-violet-04: #880E4F;
+  --ai-violet-05: #4A148C;
+  
+  --ai-velvet-01: #9C27B0;
+  --ai-velvet-02: #8E24AA;
+  --ai-velvet-03: #7B1FA2;
+  --ai-velvet-04: #6A1B9A;
+  --ai-velvet-05: #4A148C;
+  
+  --ai-green-01: #4CAF50;
+  --ai-green-02: #43A047;
+  --ai-green-03: #388E3C;
+  --ai-green-04: #2E7D32;
+  --ai-green-05: #1B5E20;
+  
+  /* Premium Brand System */
+  --brand-primary: var(--capgemini-blue);
+  --brand-secondary: var(--vibrant-blue);
+  --brand-accent: var(--deep-purple);
+  --brand-primary-light: var(--capgemini-blue-light);
+  --brand-secondary-light: var(--vibrant-blue-light);
+  --brand-accent-light: var(--deep-purple-light);
+  
+  /* AI Startup Brand System */
+  --ai-primary: var(--ai-peacock-01);
+  --ai-secondary: var(--ai-teal-02);
+  --ai-accent: var(--ai-violet-02);
+  --ai-success: var(--ai-green-02);
+  --ai-energy: var(--ai-violet-01);
+  
+  /* AI Accessible Text Colors (dynamically set by JavaScript) */
+  --ai-primary-foreground: #000000;
+  --ai-secondary-foreground: #ffffff;
+  --ai-accent-foreground: #ffffff;
+  --ai-success-foreground: #ffffff;
+  
+  /* Derived Colors */
+  --brand-primary-dark: #005a8a;
+  --brand-secondary-dark: #0081b3;
+  --brand-accent-dark: #1f0a44;
+  
+  /* Premium Background System */
+  --background: #f8f9fb;
+  --background-subtle: #f1f3f6;
+  --background-elevated: #ffffff;
+  
+  /* Content & Text */
+  --foreground: #1a1d23;
+  --foreground-muted: #64748b;
+  --foreground-subtle: #94a3b8;
+  
+  /* Card System */
+  --card: #ffffff;
+  --card-foreground: #1a1d23;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --card-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  
+  /* Interactive Elements */
+  --popover: #ffffff;
+  --popover-foreground: #1a1d23;
+  --primary: var(--brand-primary);
+  --primary-foreground: #ffffff;
+  --primary-hover: var(--brand-primary-dark);
+  
+  /* Secondary System - Neutral hover system for navigation */
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --secondary-hover: #e2e8f0;
+  
+  /* Accent System - Using Deep Purple */
+  --accent: var(--brand-accent);
+  --accent-foreground: #ffffff;
+  --accent-light: var(--brand-accent-light);
+  --accent-hover: var(--brand-accent-dark);
+  
+  /* Muted Elements */
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --muted-hover: #e2e8f0;
+  
+  /* Status Colors */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #d97706;
+  --warning-foreground: #ffffff;
+  
+  /* Borders & Dividers */
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+  --border-strong: #cbd5e1;
+  
+  /* Input System */
+  --input: transparent;
+  --input-background: #ffffff;
+  --input-border: #d1d5db;
+  --input-focus: var(--brand-primary);
+  
+  /* Switch & Toggle */
+  --switch-background: #cbd5e1;
+  
+  /* Typography */
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  
+  /* Focus Ring */
+  --ring: var(--brand-primary);
+  --ring-offset: #ffffff;
+  
+  /* Chart Colors - AI Startup Palette */
+  --chart-1: var(--ai-peacock-01);
+  --chart-2: var(--ai-teal-02);
+  --chart-3: var(--ai-violet-02);
+  --chart-4: var(--ai-green-02);
+  --chart-5: var(--capgemini-blue);
+  
+  /* Border Radius */
+  --radius: 0.5rem;
+  
+  /* Sidebar System */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1a1d23;
+  --sidebar-primary: var(--brand-primary);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f8fafc;
+  --sidebar-accent-foreground: #475569;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: var(--brand-primary);
+  --sidebar-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  --background: #0f172a;
+  --background-subtle: #1e293b;
+  --background-elevated: #334155;
+  
+  --foreground: #f8fafc;
+  --foreground-muted: #94a3b8;
+  --foreground-subtle: #64748b;
+  
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --card-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: var(--brand-secondary);
+  --primary-foreground: #0f172a;
+  --primary-hover: #1596c4;
+  
+  --secondary: #334155;
+  --secondary-foreground: #e2e8f0;
+  --secondary-hover: #475569;
+  
+  --accent: var(--brand-secondary);
+  --accent-foreground: #0f172a;
+  --accent-light: rgba(23, 171, 218, 0.2);
+  --accent-hover: #1596c4;
+  
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --muted-hover: #475569;
+  
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
+  
+  --border: #334155;
+  --border-subtle: #475569;
+  --border-strong: #64748b;
+  
+  --input: #334155;
+  --input-background: #1e293b;
+  --input-border: #475569;
+  --input-focus: var(--brand-secondary);
+  
+  --switch-background: #475569;
+  
+  --ring: var(--brand-secondary);
+  --ring-offset: #0f172a;
+  
+  --chart-1: var(--brand-secondary);
+  --chart-2: var(--brand-primary);
+  --chart-3: #a855f7;
+  --chart-4: #34d399;
+  --chart-5: #fbbf24;
+  
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: var(--brand-secondary);
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #e2e8f0;
+  --sidebar-border: #334155;
+  --sidebar-ring: var(--brand-secondary);
+  --sidebar-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-subtle: var(--background-subtle);
+  --color-background-elevated: var(--background-elevated);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted-hover: var(--muted-hover);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-light: var(--accent-light);
+  --color-accent-hover: var(--accent-hover);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-input-border: var(--input-border);
+  --color-input-focus: var(--input-focus);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-ring-offset: var(--ring-offset);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-shadow: var(--sidebar-shadow);
+  --shadow-card: var(--card-shadow);
+  --shadow-card-lg: var(--card-shadow-lg);
+  
+  /* Brand Color Utilities */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-primary-light: var(--brand-primary-light);
+  --color-brand-secondary-light: var(--brand-secondary-light);
+  --color-brand-accent-light: var(--brand-accent-light);
+  --color-brand-primary-dark: var(--brand-primary-dark);
+  --color-brand-secondary-dark: var(--brand-secondary-dark);
+  --color-brand-accent-dark: var(--brand-accent-dark);
+  
+  /* Capgemini Specific Colors */
+  --color-capgemini-blue: var(--capgemini-blue);
+  --color-capgemini-blue-light: var(--capgemini-blue-light);
+  --color-vibrant-blue: var(--vibrant-blue);
+  --color-vibrant-blue-light: var(--vibrant-blue-light);
+  --color-deep-purple: var(--deep-purple);
+  --color-deep-purple-light: var(--deep-purple-light);
+  
+  /* AI Startup Colors */
+  --color-ai-primary: var(--ai-primary);
+  --color-ai-secondary: var(--ai-secondary);
+  --color-ai-accent: var(--ai-accent);
+  --color-ai-success: var(--ai-success);
+  --color-ai-energy: var(--ai-energy);
+  
+  /* AI Accessible Foreground Colors */
+  --color-ai-primary-foreground: var(--ai-primary-foreground);
+  --color-ai-secondary-foreground: var(--ai-secondary-foreground);
+  --color-ai-accent-foreground: var(--ai-accent-foreground);
+  --color-ai-success-foreground: var(--ai-success-foreground);
+  
+  /* Individual Palette Access */
+  --color-ai-teal-01: var(--ai-teal-01);
+  --color-ai-teal-02: var(--ai-teal-02);
+  --color-ai-teal-03: var(--ai-teal-03);
+  --color-ai-peacock-01: var(--ai-peacock-01);
+  --color-ai-peacock-02: var(--ai-peacock-02);
+  --color-ai-peacock-03: var(--ai-peacock-03);
+  --color-ai-violet-01: var(--ai-violet-01);
+  --color-ai-violet-02: var(--ai-violet-02);
+  --color-ai-green-02: var(--ai-green-02);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Premium card styling */
+  .card {
+    @apply bg-card text-card-foreground;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-subtle);
+  }
+  
+  .card-elevated {
+    box-shadow: var(--card-shadow-lg);
+  }
+  
+  /* Premium button enhancements */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px -4px rgba(0, 112, 173, 0.4), var(--card-shadow-lg);
+  }
+  
+  /* Accent backgrounds */
+  .bg-accent-light {
+    background-color: var(--accent-light);
+  }
+  
+  /* Premium scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--background-subtle);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--foreground-muted);
+  }
+}
+
+/**
+ * Base typography with premium font weights
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.4;
+      color: var(--foreground);
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.4;
+      color: var(--foreground);
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.4;
+      color: var(--foreground);
+    }
+
+    h4 {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      color: var(--foreground);
+    }
+
+    p {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.6;
+      color: var(--foreground-muted);
+    }
+
+    label {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      color: var(--foreground);
+    }
+
+    button {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    input {
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+/* Premium utility classes */
+@layer utilities {
+  .shadow-card {
+    box-shadow: var(--card-shadow);
+  }
+  
+  .shadow-card-lg {
+    box-shadow: var(--card-shadow-lg);
+  }
+  
+  .bg-gradient-brand {
+    background: linear-gradient(135deg, var(--capgemini-blue) 0%, var(--vibrant-blue) 100%);
+  }
+  
+  .bg-gradient-accent {
+    background: linear-gradient(135deg, var(--deep-purple) 0%, var(--vibrant-blue) 100%);
+  }
+  
+  .bg-gradient-premium {
+    background: linear-gradient(135deg, var(--capgemini-blue) 0%, var(--deep-purple) 50%, var(--vibrant-blue) 100%);
+  }
+  
+  /* Modern AI Startup Gradients */
+  .bg-gradient-ai-primary {
+    background: linear-gradient(135deg, var(--ai-peacock-01) 0%, var(--ai-teal-02) 100%);
+  }
+  
+  .bg-gradient-ai-energy {
+    background: linear-gradient(135deg, var(--ai-violet-01) 0%, var(--ai-peacock-01) 100%);
+  }
+  
+  .bg-gradient-ai-success {
+    background: linear-gradient(135deg, var(--ai-green-02) 0%, var(--ai-teal-03) 100%);
+  }
+  
+  .bg-gradient-ai-dynamic {
+    background: linear-gradient(135deg, var(--ai-peacock-01) 0%, var(--ai-violet-02) 50%, var(--ai-teal-02) 100%);
+  }
+  
+  .bg-gradient-glow {
+    background: radial-gradient(circle at center, var(--ai-peacock-01) 0%, transparent 70%);
+  }
+  
+  .text-brand-primary {
+    color: var(--brand-primary);
+  }
+  
+  .text-brand-secondary {
+    color: var(--brand-secondary);
+  }
+  
+  .text-brand-accent {
+    color: var(--brand-accent);
+  }
+  
+  .bg-brand-accent {
+    background-color: var(--brand-accent);
+  }
+  
+  .text-vibrant-blue {
+    color: var(--vibrant-blue);
+  }
+  
+  .bg-vibrant-blue {
+    background-color: var(--vibrant-blue);
+  }
+  
+  .text-deep-purple {
+    color: var(--deep-purple);
+  }
+  
+  .bg-deep-purple {
+    background-color: var(--deep-purple);
+  }
+  
+  .border-brand-primary {
+    border-color: var(--brand-primary);
+  }
+  
+  .border-brand-secondary {
+    border-color: var(--brand-secondary);
+  }
+  
+  .border-brand-accent {
+    border-color: var(--brand-accent);
+  }
+  
+  .border-vibrant-blue {
+    border-color: var(--vibrant-blue);
+  }
+  
+  .border-deep-purple {
+    border-color: var(--deep-purple);
+  }
+  
+  /* AI Startup Utility Classes */
+  .text-ai-primary {
+    color: var(--ai-primary);
+  }
+  
+  .text-ai-secondary {
+    color: var(--ai-secondary);
+  }
+  
+  .text-ai-accent {
+    color: var(--ai-accent);
+  }
+  
+  .text-ai-energy {
+    color: var(--ai-energy);
+  }
+  
+  .bg-ai-primary {
+    background-color: var(--ai-primary);
+  }
+  
+  .bg-ai-secondary {
+    background-color: var(--ai-secondary);
+  }
+  
+  .bg-ai-accent {
+    background-color: var(--ai-accent);
+  }
+  
+  .bg-ai-energy {
+    background-color: var(--ai-energy);
+  }
+  
+  .border-ai-primary {
+    border-color: var(--ai-primary);
+  }
+  
+  .border-ai-secondary {
+    border-color: var(--ai-secondary);
+  }
+  
+  .border-ai-accent {
+    border-color: var(--ai-accent);
+  }
+  
+  /* Accessible AI Color Classes with Dynamic Text */
+  .bg-ai-primary-accessible {
+    background-color: var(--ai-primary);
+    color: var(--ai-primary-foreground);
+  }
+  
+  .bg-ai-secondary-accessible {
+    background-color: var(--ai-secondary);
+    color: var(--ai-secondary-foreground);
+  }
+  
+  .bg-ai-accent-accessible {
+    background-color: var(--ai-accent);
+    color: var(--ai-accent-foreground);
+  }
+  
+  .bg-ai-success-accessible {
+    background-color: var(--ai-success);
+    color: var(--ai-success-foreground);
+  }
+  
+  /* Glow Effects for Modern Feel */
+  .glow-ai-primary {
+    box-shadow: 0 0 20px rgba(64, 224, 208, 0.3);
+  }
+  
+  .glow-ai-accent {
+    box-shadow: 0 0 20px rgba(142, 36, 170, 0.3);
+  }
+  
+  .hover-glow:hover {
+    box-shadow: 0 0 40px rgba(64, 224, 208, 0.6), 0 8px 20px -4px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px) scale(1.02);
+    transition: all 0.3s ease;
+  }
+  
+  /* Modern Glassmorphism */
+  .glass-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-dark {
+    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* AI Pulse Animation */
+  .ai-pulse {
+    animation: ai-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes ai-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+
+  /* Assignment Card Micro-Animations */
+  @keyframes tail-spin { 
+    to { transform: rotate(360deg); } 
+  }
+  
+  @keyframes clock-sweep { 
+    to { transform: rotate(360deg); } 
+  }
+  
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(59,130,246,.25); }
+    70% { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
+    100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  }
+  
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0%); }
+  }
+
+  .anim-shimmer::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    transform:translateX(-100%);
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+    animation:shimmer 1.75s ease-in-out infinite;
+  }
+
+  .pulse-ring{
+    animation:pulse 2.5s ease-in-out infinite;
+  }
+
+  .anim-tail-spin { 
+    animation: tail-spin .9s linear infinite; 
+  }
+  
+  .anim-clock { 
+    animation: clock-sweep 20s linear infinite; 
+    transform-origin: 50% 50%; 
+  }
+  
+  .anim-pulse-ring { 
+    animation: pulse-ring 2s ease-out infinite; 
+  }
+
+  .pulse-ring { 
+    animation: pulse-ring 2s ease-out infinite; 
+  }
+  
+  .anim-shimmer::after {
+    content:""; 
+    position:absolute; 
+    inset:0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+    animation: shimmer 1.4s infinite;
+  }
+  
+  /* Modern Hover Effects */
+  .modern-hover:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Clean Card Hover State */
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  .card-hover:hover {
+    background-color: var(--background-elevated);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--hover-border-color, var(--ai-primary));
+    border-color: var(--hover-border-color, var(--ai-primary));
+  }
+  
+  /* Large Card Hover with Dynamic Color */
+  .large-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  .large-card-hover:hover {
+    background-color: var(--background-elevated);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--hover-border-color, var(--ai-secondary));
+    border-color: var(--hover-border-color, var(--ai-secondary));
+  }
+  
+  /* Attention Card Style */
+  .attention-card-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  .attention-card-hover:hover {
+    background-color: var(--background-elevated);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.18), 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--ai-secondary);
+    border-color: var(--ai-secondary);
+  }
+  
+  /* Dynamic Color Card Hover - uses CSS custom property for border color */
+  .dynamic-card-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  .dynamic-card-hover:hover {
+    background-color: var(--background-elevated);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.18), 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--hover-border-color, var(--ai-secondary));
+    border-color: var(--hover-border-color, var(--ai-secondary));
+  }
+  
+  /* Global Navigation Menu Item Hover - Enforced across all menus */
+  .nav-item-hover {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background-color: transparent !important;
+    border: none !important;
+  }
+  
+  .nav-item-hover:hover {
+    background-color: var(--secondary) !important;
+    color: var(--secondary-foreground) !important;
+    border-color: transparent !important;
+  }
+  
+  .nav-item-hover:hover svg {
+    color: var(--secondary-foreground) !important;
+  }
+  
+  /* Remove all purple hover states globally */
+  .nav-item-hover:hover,
+  .chat-settings-button:hover,
+  button[class*="nav"]:hover,
+  [class*="menu"]:hover {
+    background-color: var(--secondary) !important;
+    color: var(--secondary-foreground) !important;
+  }
+  
+  /* Ensure no purple backgrounds in any menu items */
+  *[class*="purple"]:hover,
+  *[style*="purple"]:hover,
+  *[style*="#9C27B0"]:hover,
+  *[style*="#8E24AA"]:hover {
+    background-color: var(--secondary) !important;
+    color: var(--secondary-foreground) !important;
+  }
+
+  /* Status-accented cards */
+  .status-accent-card{
+    --status-color: var(--border);         /* fallback */
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: var(--status-color);
+    transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+    border-radius: 0.75rem;                /* keep your rounded-2xl feel */
+  }
+
+  /* Hover/focus outline follows the status color */
+  .status-accent-card:hover,
+  .status-accent-card:focus-within{
+    /* subtle inner outline + soft elevation */
+    box-shadow:
+      0 0 0 2px color-mix(in oklab, var(--status-color) 36%, transparent) inset,
+      0 8px 18px rgba(0,0,0,.06);
+  }
+
+  /* "Active/expanded/selected" state if you need a stronger callout */
+  .status-accent-card[data-active="true"]{
+    box-shadow:
+      0 0 0 2px var(--status-color) inset,
+      0 14px 30px rgba(0,0,0,.10);
+  }
+
+  /* Optional: dim when de-emphasized (you were using this in NeedsAttention) */
+  .status-accent-card[data-dim="true"]{
+    opacity:.35;
+    transform: scale(.97);
+    filter: saturate(.5);
+  }
+
+  /* Dark mode tweaks (optional) */
+  :root.dark .status-accent-card:hover,
+  :root.dark .status-accent-card:focus-within{
+    box-shadow:
+      0 0 0 2px color-mix(in oklab, var(--status-color) 50%, transparent) inset,
+      0 10px 20px rgba(0,0,0,.35);
+  }
+
+  /* Card severity accent */
+  .status-accent {
+    border-left-width: 4px !important;
+    border-left-color: var(--accent, #e5e7eb); /* default muted */
+  }
+
+  /* Hover outline that picks up the same accent color */
+  .dynamic-card-hover {
+    transition: box-shadow .2s ease, transform .2s ease, outline-color .2s ease;
+  }
+  .dynamic-card-hover:hover {
+    outline: 2px solid var(--accent, rgba(0,0,0,0.08));
+    outline-offset: 0;
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+  }
+
+  /* Optional: subtle glow on focus-within */
+  .dynamic-card-hover:focus-within {
+    outline: 2px solid var(--accent, rgba(0,0,0,0.1));
+    outline-offset: 0;
+  }
+
+  /* ===== MIRA OPS DESIGN SYSTEM ===== */
+  
+  /* Accent system variables */
+  --accent-priority-low: #22C55E;
+  --accent-priority-medium: #EAB308;
+  --accent-priority-high: #F97316;
+  --accent-priority-critical: #EF4444;
+  
+  /* Risk mapping to priority colors */
+  --accent-risk-Low: var(--accent-priority-low);
+  --accent-risk-Medium: var(--accent-priority-medium);
+  --accent-risk-High: var(--accent-priority-high);
+  --accent-risk-Critical: var(--accent-priority-critical);
+  
+  /* Neutral design tokens */
+  --surface-card: #FFFFFF;
+  --border-default: #E5E7EB;
+  --text-primary: #0F172A;
+  --text-secondary: #6B7280;
+  
+  /* Progress system */
+  --progress-base: #EAEFF5;
+  --progress-active: #2563EB;
+  --progress-complete: var(--accent-priority-low);
+  --progress-idle: #CBD5E1;
+  
+  /* Effect styles */
+  --elevation-card: 0 4px 12px rgba(0, 0, 0, 0.06);
+  
+  /* Mira Ops Accent Card System */
+  .mira-accent-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: 16px;
+    border-left-width: 4px;
+    border-left-color: var(--accent, var(--border-default));
+    transition: box-shadow 0.2s ease, transform 0.2s ease, outline-color 0.2s ease;
+    box-shadow: var(--elevation-card);
+  }
+  
+  .mira-accent-card:hover {
+    outline: 2px solid var(--accent, rgba(0, 0, 0, 0.08));
+    outline-offset: 0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  }
+  
+  .mira-accent-card:focus-within {
+    outline: 2px solid var(--accent, rgba(0, 0, 0, 0.1));
+    outline-offset: 0;
+  }
+  
+  .mira-accent-card[data-state="disabled"] {
+    opacity: 0.4;
+  }
+  
+  /* Mira Ops Badge/Pill System */
+  .mira-badge {
+    font-size: 12px;
+    line-height: 16px;
+    padding: 0 8px;
+    border-radius: 16px;
+    border: 1px solid var(--accent, var(--border-default));
+    background: white;
+    color: var(--accent, var(--text-primary));
+    font-weight: 500;
+  }
+  
+  /* Dark mode overrides for Mira system */
+  .dark .mira-accent-card {
+    background: var(--card);
+    border-color: var(--border);
+    --surface-card: var(--card);
+    --border-default: var(--border);
+    --text-primary: var(--foreground);
+    --text-secondary: var(--muted-foreground);
+    --progress-base: var(--muted);
+    --progress-idle: var(--muted);
+  }
+  
+  .dark .mira-badge {
+    background: var(--card);
+    color: var(--accent, var(--foreground));
+  }
+  
+  /* Mira Progress Bar System */
+  .mira-progress {
+    height: 8px;
+    border-radius: 8px;
+    background: var(--progress-base);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .mira-progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s ease;
+  }
+  
+  /* Progress states */
+  .mira-progress-fill[data-state="idle"] {
+    background: var(--progress-idle);
+  }
+  
+  .mira-progress-fill[data-state="active"] {
+    background: var(--progress-active);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mira-progress-fill[data-state="active"]::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer-progress 1.5s ease-in-out infinite;
+  }
+  
+  .mira-progress-fill[data-state="complete"] {
+    background: var(--progress-complete);
+  }
+  
+  @keyframes shimmer-progress {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+  
+  /* Mira Step Row - Clean without timeline */
+  .mira-step-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .mira-step-row:hover {
+    background: var(--muted, #f8f9fa);
+  }
+  
+  .mira-step-index {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  
+  .mira-step-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .mira-step-title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+  
+  .mira-step-description {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-secondary);
+  }
+  
+  .mira-agent-tag {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  
+  /* Content templates */
+  .mira-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .mira-card-title {
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .mira-card-description {
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  
+  .mira-card-meta {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+  
+  .mira-status-callout {
+    background: var(--muted, #f8f9fa);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 12px;
+  }
+  
+  .mira-status-callout-text {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-primary);
+  }
+  
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .mira-accent-card,
+    .mira-progress-fill,
+    .mira-step-row {
+      transition: none;
+    }
+    
+    .mira-progress-fill[data-state="active"]::after {
+      animation: none;
+    }
+  }
+}
+
+/* ChatGPT Style Chat Interface - Clean Modern Design */
+@layer components {
+  
+  /* Premium Chat Card Container */
+  .chat-card {
+    @apply bg-card text-card-foreground gap-6 rounded-xl border h-full flex flex-col;
+    box-shadow: var(--card-shadow);
+  }
+  
+  /* Enhanced Chat Header */
+  .chat-header {
+    @apply px-6 pt-6 pb-4 flex-shrink-0;
+    background: linear-gradient(135deg, var(--card) 0%, var(--background-elevated) 100%);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  
+  /* Chat Title with Icon */
+  .chat-title {
+    @apply leading-none flex items-center gap-2 text-lg font-semibold;
+    color: var(--foreground);
+  }
+  
+  .chat-title svg {
+    color: var(--ai-primary);
+  }
+  
+  /* Premium Chat Content Area */
+  .chat-content {
+    @apply flex-1 pt-6 pb-6 px-6 min-h-0 h-full;
+  }
+  
+  /* Enhanced Input Container with Highlighter System */
+  .chat-input-container {
+    @apply bg-card border border-border rounded-xl shadow-sm flex-shrink-0;
+    background: linear-gradient(135deg, var(--card) 0%, var(--background-elevated) 100%);
+    border: 1px solid var(--border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 52px;
+  }
+  
+  .chat-input-container:focus-within {
+    border-color: var(--ai-primary);
+    box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.1), var(--card-shadow-lg);
+    transform: translateY(-2px);
+  }
+  
+  /* Highlighter Overlay System */
+  .chat-highlighter {
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    overflow: hidden;
+    box-sizing: border-box;
+    tab-size: inherit;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    z-index: 10;
+  }
+  
+  /* Ensure the highlighter text has proper contrast in both themes */
+  .chat-highlighter .text-foreground {
+    color: var(--foreground);
+  }
+  
+  .chat-highlighter .text-muted-foreground {
+    color: var(--muted-foreground);
+  }
+  
+  /* Enhanced Textarea */
+  .chat-textarea {
+    @apply relative bg-transparent selection:bg-ai-primary/20 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-xl;
+    caret-color: var(--foreground);
+    font: inherit;
+    letter-spacing: inherit;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    box-sizing: border-box;
+    tab-size: inherit;
+    background: transparent;
+    z-index: 20;
+    position: relative;
+  }
+  
+  .chat-textarea::placeholder {
+    color: transparent;
+  }
+  
+  /* Premium Send Button */
+  .chat-send-button {
+    @apply z-20 h-8 w-8 p-0 rounded-md border-0;
+    background: var(--ai-primary);
+    color: white;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .chat-send-button:hover:not(:disabled) {
+    background: var(--ai-primary);
+    opacity: 0.9;
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(64, 224, 208, 0.4);
+  }
+  
+  .chat-send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ChatGPT-Style Message Container */
+  .chat-container {
+    @apply flex flex-col;
+    padding: 16px;
+  }
+  
+  /* Hide Message Avatars */
+  .message-avatar {
+    display: none;
+  }
+  
+  /* User Messages - Light grey, right aligned */
+  .user-message {
+    background: #f3f4f6;
+    padding: 10px 14px;
+    border-radius: 12px;
+    margin: 6px 0;
+    max-width: 70%;
+    align-self: flex-end;
+    display: inline-block;
+    color: var(--foreground);
+  }
+  
+  .dark .user-message {
+    background: #374151;
+    color: var(--foreground);
+  }
+  
+  /* Agent Messages - White background, left aligned */
+  .agent-message {
+    background: #ffffff;
+    padding: 10px 14px;
+    margin: 6px 0;
+    max-width: 70%;
+    align-self: flex-start;
+    display: inline-block;
+    color: var(--foreground);
+  }
+  
+  .dark .agent-message {
+    background: var(--background-elevated);
+    color: var(--foreground);
+  }
+  
+  /* System Messages - No background, muted */
+  .system-message {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin: 6px 0;
+    align-self: flex-start;
+    display: inline-block;
+    background: none;
+    padding: 4px 0;
+  }
+  
+  .dark .system-message {
+    color: #9ca3af;
+  }
+  
+  /* Feedback Controls for Agent Messages */
+  .feedback {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    display: flex;
+    gap: 4px;
+  }
+  
+  .feedback button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 6px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+  
+  .feedback button:hover {
+    background: var(--muted);
+    transform: scale(1.1);
+  }
+  
+  .dark .feedback {
+    color: #6b7280;
+  }
+  
+  /* Empty State Styling */
+  .chat-empty-state {
+    @apply text-center py-12;
+    color: var(--foreground-muted);
+  }
+  
+  .chat-empty-state svg {
+    @apply h-12 w-12 mx-auto mb-4;
+    color: var(--foreground-muted);
+  }
+  
+  /* Premium Mention Styling */
+  .chat-highlighter,
+  .chat-highlighter .mention {
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    tab-size: inherit;
+  }
+  
+  .mention {
+    font-weight: inherit;
+    padding: 0;
+    border: none;
+    background: rgba(64, 224, 208, 0.15);
+    box-shadow: 0 0 0 .25rem rgba(64, 224, 208, 0.15);
+    border-radius: .5rem;
+    box-decoration-break: clone;
+    color: var(--ai-primary, #40E0D0);
+    transition: all 0.2s ease;
+  }
+  
+  .mention:hover {
+    background: rgba(64, 224, 208, 0.25);
+    box-shadow: 0 0 0 .25rem rgba(64, 224, 208, 0.25);
+  }
+  
+  .mention-in-message {
+    background: #e8f2ff;
+    color: #1d4ed8;
+    border-radius: 8px;
+    padding: 0 0.375rem;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: inline-block;
+    transition: all 0.2s ease;
+  }
+  
+  .mention-in-message:hover {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+  
+  /* Dark Mode Enhancements */
+  .dark .mention {
+    background: rgba(64, 224, 208, 0.1);
+    box-shadow: 0 0 0 .25rem rgba(64, 224, 208, 0.1);
+    color: var(--ai-primary, #40E0D0);
+  }
+  
+  .dark .mention:hover {
+    background: rgba(64, 224, 208, 0.2);
+    box-shadow: 0 0 0 .25rem rgba(64, 224, 208, 0.2);
+  }
+  
+  .dark .mention-in-message {
+    background: rgba(29, 78, 216, 0.2);
+    color: #93c5fd;
+  }
+  
+  .dark .mention-in-message:hover {
+    background: rgba(29, 78, 216, 0.3);
+    color: #bfdbfe;
+  }
+
+  /* TipTap Editor Enhancements for Chat */
+  .ProseMirror {
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 20px;
+    max-height: 120px;
+    overflow-y: auto;
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+
+  /* TipTap Mention Styling */
+  .ProseMirror .mention {
+    display: inline-block;
+    padding: 1px 4px;
+    margin: 0 1px;
+    border-radius: 4px;
+    background: rgba(64, 224, 208, 0.15);
+    color: var(--ai-primary);
+    border: 1px solid rgba(64, 224, 208, 0.3);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .ProseMirror .mention:hover {
+    background: rgba(64, 224, 208, 0.25);
+    border-color: rgba(64, 224, 208, 0.5);
+  }
+
+  .dark .ProseMirror .mention {
+    background: rgba(64, 224, 208, 0.1);
+    border-color: rgba(64, 224, 208, 0.2);
+  }
+
+  .dark .ProseMirror .mention:hover {
+    background: rgba(64, 224, 208, 0.2);
+    border-color: rgba(64, 224, 208, 0.4);
+  }
+
+  /* TipTap placeholder styling */
+  .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: var(--muted-foreground);
+    pointer-events: none;
+    height: 0;
+  }
+  
+  /* Chat Controls */
+  .chat-controls {
+    @apply flex items-center gap-4;
+  }
+  
+  .chat-switch-container {
+    @apply flex items-center gap-2;
+  }
+  
+  .chat-switch-label {
+    @apply text-sm;
+    color: var(--foreground-muted);
+  }
+  
+  /* Global Menu Button - Uses standardized nav-item-hover behavior */
+  .chat-settings-button {
+    @apply h-8 rounded-md gap-1.5 px-3;
+    background: transparent !important;
+    color: var(--foreground) !important;
+    border: none !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  .chat-settings-button:hover {
+    background-color: var(--secondary) !important;
+    color: var(--secondary-foreground) !important;
+  }
+  
+  .chat-settings-button:hover svg {
+    color: var(--secondary-foreground) !important;
+  }
+}
+
+/* ---- Masked text input: one row, perfectly aligned ---- */
+.masked-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--background-elevated);
+}
+
+.masked-send {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--foreground-muted);
+  transition: all 0.2s ease;
+}
+
+.masked-send:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+/* The editor box */
+.masked-editor {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  min-height: 40px;
+  border-radius: 10px;
+}
+
+/* Reset margins so the first line sits correctly */
+.masked-editor .ProseMirror p {
+  margin: 0;
+}
+
+/* Make first line sit correctly */
+.ProseMirror p { 
+  margin: 0; 
+}
+
+/* Centre chips on the text baseline */
+.ProseMirror .mention {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.5rem;   /* match leading-6 */
+  padding: 0 .375rem;    /* px-1.5 */
+  vertical-align: middle;
+}
+
+/* Belt-and-braces rule for Safari baseline alignment */
+.ProseMirror, .ProseMirror * { 
+  vertical-align: middle; 
+}
+
+/* Make the placeholder behave like a real input hint */
+.masked-editor .ProseMirror p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  pointer-events: none;
+  color: var(--muted-foreground, #9ca3af);
+}
+
+/* Prevent stray min-height from collapsing caret */
+.masked-editor .ProseMirror {
+  min-height: 1.5rem;
+  outline: none;
+  line-height: 1.5rem;  /* 24px */
+  padding-top: 0.375rem;  /* 6px */
+  padding-bottom: 0.375rem;
+  width: 100%;
+}
+
+/* Your mention chip/badge inside the editor */
+.masked-editor .mention,
+.masked-editor .mention-chip {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.5rem;  /* match .ProseMirror */
+  padding: 0 0.375rem;
+  border-radius: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Keep chips, text and icons aligned */
+.masked-editor .ProseMirror *,
+.masked-editor .mention,
+.masked-editor .mention-chip {
+  vertical-align: middle;
+}
+
+/* Empty-state wrapper (centres the module) */
+.empty-state{
+  display:flex;
+  flex:1 1 auto;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.empty-state__container{
+  width:100%;
+  max-width:720px;             /* tidy "search bar" width */
+  text-align:center;
+}
+
+/* Chat input: make the editor fill the row and left-align text & caret */
+.masked-editor { display:flex; align-items:center; }
+.masked-editor [contenteditable="true"],
+.masked-editor .tiptap,                /* TipTap root */
+.masked-editor .ProseMirror,           /* TipTap inner */
+.masked-editor textarea,               /* fallback if any */
+.masked-editor input[type="text"] {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;       /* prevents flex overflow tricks */
+  text-align: left;
+  margin: 0;
+  display: block;
+}
+
+/* Make sure nothing recenters it */
+.masked-row { justify-content: flex-start; }
