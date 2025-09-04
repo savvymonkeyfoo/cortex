@@ -75,9 +75,21 @@ async function makeRequest(path: string, options: RequestInit = {}) {
 
 // Helper function to hydrate waiting_on fields from approval_chain
 function hydrateWaitingOn(a: Assignment): Assignment {
-  if (a.status !== 'review') return { ...a, waiting_on_id: null, waiting_on_name: null, waiting_on_role: null, waiting_on_avatar_url: null };
-  if (a.waiting_on_name) return a; // DB already synced
+  // Only normalize for review status
+  if (a.status !== 'review') {
+    return {
+      ...a,
+      waiting_on_id: null,
+      waiting_on_name: null,
+      waiting_on_role: null,
+      waiting_on_avatar_url: null,
+    };
+  }
 
+  // If DB already has explicit reviewer, use it as-is
+  if (a.waiting_on_name) return a;
+
+  // 1) Try to infer from approval_chain pending entry
   if (Array.isArray(a.approval_chain)) {
     const pending = a.approval_chain.find((x: any) => x?.status === 'pending');
     if (pending) {
@@ -91,6 +103,16 @@ function hydrateWaitingOn(a: Assignment): Assignment {
       };
     }
   }
+
+  // 2) Fallback to first assignee for review label when approval_chain is absent
+  if (Array.isArray(a.assignees) && a.assignees.length > 0) {
+    return {
+      ...a,
+      waiting_on_name: a.assignees[0] ?? null,
+    } as Assignment;
+  }
+
+  // 3) Final fallback: leave as-is (component will handle generic label)
   return a;
 }
 

@@ -46,15 +46,16 @@ export function AssignmentKanbanCard({ assignment, status }: AssignmentKanbanCar
       );
 
     case 'review':
-      // Use real waiting_on data from assignment, fallback to generic message
-      const waitingOnData = assignment.waiting_on_name 
-        ? { 
-            id: assignment.waiting_on_id || "unknown", 
-            name: assignment.waiting_on_name,
+      // Use waiting_on fields if present; otherwise fallback to first assignee
+      const inferredName = assignment.waiting_on_name || assignment.assignees?.[0] || undefined;
+      const waitingOnData = inferredName
+        ? {
+            id: assignment.waiting_on_id || "unknown",
+            name: inferredName,
             role: assignment.waiting_on_role,
-            avatar_url: assignment.waiting_on_avatar_url
+            avatar_url: assignment.waiting_on_avatar_url,
           }
-        : { id: "review", name: "review" }; // Fallback when no specific approver
+        : { id: "review", name: "review" }; // Final fallback when no data available
       
       return (
         <ReviewCard

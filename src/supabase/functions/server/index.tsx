@@ -183,7 +183,8 @@ const getMockAssignments = (statuses?: string[]) => {
       created_by: 'system',
       created_at: new Date().toISOString(),
       estimated_hours: 12,
-      assignee: 'Backend Team'
+      assignee: 'Backend Team',
+      waiting_on_name: 'Backend Team'
     },
     {
       id: 'mock-3',
@@ -231,7 +232,8 @@ const getMockAssignments = (statuses?: string[]) => {
       created_by: 'system',
       created_at: new Date().toISOString(),
       estimated_hours: 4,
-      assignee: 'Database Team'
+      assignee: 'Database Team',
+      waiting_on_name: 'Database Team'
     }
   ];
 

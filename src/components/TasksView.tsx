@@ -278,8 +278,16 @@ export function TasksView() {
       // Set dragging state for visual feedback
       setDraggedAssignment(item.id);
       
-      // Update the assignment status
-      await updateAssignment(item.id, { status: targetStatus });
+      // Update the assignment status (and set waiting_on when moving to review)
+      const updates: Partial<Assignment> = { status: targetStatus } as any;
+      if (targetStatus === 'review') {
+        const inferredReviewer = (assignmentToUpdate as any).waiting_on_name || assignmentToUpdate.assignees?.[0];
+        if (inferredReviewer) {
+          (updates as any).waiting_on_name = inferredReviewer;
+        }
+      }
+
+      await updateAssignment(item.id, updates);
       
       console.log(`Successfully moved assignment to ${targetStatus}`);
       
