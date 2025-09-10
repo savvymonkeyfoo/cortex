@@ -1,5 +1,6 @@
 // Mock Repository Implementation
 import type { AssignmentsRepo, Assignment, Step, TaskStatus } from "./assignments";
+import { SYSTEM_USER_ID } from "../constants";
 
 // Mock data - moved from TasksView with enhanced structure
 const mockAssignments: Assignment[] = [
@@ -10,7 +11,7 @@ const mockAssignments: Assignment[] = [
     status: "in_progress",
     priority: "high",
     progress: 45,
-    created_by: "system",
+    created_by: SYSTEM_USER_ID,
     created_at: "2024-01-10T08:00:00Z",
     assignees: ["db-team", "ops-team"],
     tags: ["database", "upgrade", "production"],
@@ -25,7 +26,7 @@ const mockAssignments: Assignment[] = [
     status: "review",
     priority: "medium",
     progress: 90,
-    created_by: "system",
+    created_by: SYSTEM_USER_ID,
     created_at: "2024-01-09T09:30:00Z",
     assignees: ["dev-team", "api-team"],
     tags: ["api", "security", "redis"],
@@ -50,7 +51,7 @@ const mockAssignments: Assignment[] = [
     status: "todo",
     priority: "high",
     progress: 0,
-    created_by: "system", 
+    created_by: SYSTEM_USER_ID, 
     created_at: "2024-01-08T14:15:00Z",
     assignees: ["k8s-team", "monitoring-team"],
     tags: ["kubernetes", "monitoring", "prometheus"],
@@ -64,7 +65,7 @@ const mockAssignments: Assignment[] = [
     status: "done",
     priority: "critical",
     progress: 100,
-    created_by: "system",
+    created_by: SYSTEM_USER_ID,
     created_at: "2024-01-05T10:00:00Z",
     assignees: ["security-team", "auth-team"],
     tags: ["security", "audit", "oauth"],
@@ -79,7 +80,7 @@ const mockAssignments: Assignment[] = [
     status: "in_progress",
     priority: "medium",
     progress: 60,
-    created_by: "system",
+    created_by: SYSTEM_USER_ID,
     created_at: "2024-01-09T11:00:00Z",
     assignees: ["ci-team", "dev-team"],
     tags: ["ci/cd", "performance", "docker"],
@@ -94,7 +95,7 @@ const mockAssignments: Assignment[] = [
     status: "todo",
     priority: "high",
     progress: 0,
-    created_by: "system",
+    created_by: SYSTEM_USER_ID,
     created_at: "2024-01-08T16:30:00Z",
     assignees: ["security-team", "ops-team"],
     tags: ["ssl", "certificates", "security"],
@@ -108,7 +109,7 @@ const mockAssignments: Assignment[] = [
     status: "review",
     priority: "medium",
     progress: 80,
-    created_by: "system",
+    created_by: SYSTEM_USER_ID,
     created_at: "2024-01-10T12:00:00Z",
     assignees: ["database-team"],
     tags: ["database", "backup", "verification"],

@@ -161,6 +161,7 @@ function convertToLegacyStep(dbStep: DatabaseStep): Step {
 
 // Import users data
 import { users, getRandomUser } from './users';
+import { SYSTEM_USER_ID } from '../constants';
 
 // Fallback mock data
 const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
@@ -177,7 +178,7 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       status: 'in_progress',
       priority: 'high',
       progress: 45,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 16,
       assignees: ['Database Team'],
@@ -190,7 +191,7 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       status: 'review',
       priority: 'medium',
       progress: 90,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 12,
       assignees: ['Backend Team'],
@@ -208,7 +209,7 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       status: 'todo',
       priority: 'high',
       progress: 0,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 20,
       assignees: ['DevOps Team'],
@@ -221,7 +222,7 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       status: 'in_progress',
       priority: 'critical',
       progress: 75,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 8,
       assignees: ['Security Team'],
@@ -234,7 +235,7 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       status: 'todo',
       priority: 'medium',
       progress: 10,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 6,
       assignees: ['Network Team'],
@@ -247,7 +248,7 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       status: 'review',
       priority: 'medium',
       progress: 80,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 4,
       assignees: ['Database Team'],
@@ -443,7 +444,7 @@ CREATE TABLE public.assignments (
   status TEXT NOT NULL CHECK (status IN ('todo','in_progress','review','done')),
   priority TEXT NOT NULL CHECK (priority IN ('low','medium','high','critical')),
   progress INT NOT NULL DEFAULT 0 CHECK (progress BETWEEN 0 AND 100),
-  created_by TEXT NOT NULL, -- or UUID if using auth
+  created_by UUID NOT NULL, -- user id
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   assignees TEXT[], -- array of assignee IDs
   tags TEXT[], -- array of tags

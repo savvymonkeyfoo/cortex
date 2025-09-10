@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../utils/supabase/client";
 import type { Assignment } from "../types/assignment";
+import { SYSTEM_USER_ID } from "../constants";
 
 export function useAssignment(id: string | null) {
   const [data, setData] = useState<Assignment | null>(null);
@@ -24,7 +25,7 @@ export function useAssignment(id: string | null) {
           // Convert the database assignment to our Assignment type
           const formattedAssignment: Assignment = {
             ...assignment,
-            createdBy: { id: 'system', name: 'System' }, // Default since we don't have this in DB yet
+            createdBy: { id: SYSTEM_USER_ID, name: 'System' }, // Default since we don't have this in DB yet
             steps: assignment.tags?.map((tag, index) => ({
               id: `step-${index}`,
               title: tag,
@@ -52,7 +53,7 @@ export function useAssignment(id: string | null) {
       if (payload.new?.id === id && active) {
         const updatedAssignment: Assignment = {
           ...payload.new,
-          createdBy: { id: 'system', name: 'System' },
+          createdBy: { id: SYSTEM_USER_ID, name: 'System' },
           steps: payload.new.tags?.map((tag: string, index: number) => ({
             id: `step-${index}`,
             title: tag,

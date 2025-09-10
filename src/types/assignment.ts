@@ -63,7 +63,7 @@ export interface DatabaseAssignment {
   impact?: string;
   simulation?: string;
   
-  created_by: string;
+  created_by: string; // UUID of creator
   created_at: string;
   estimated_hours?: number;
 

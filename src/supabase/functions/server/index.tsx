@@ -40,6 +40,7 @@ import {
   seedLiveAssignments
 } from './supabase-db.tsx';
 import { createClient } from 'npm:@supabase/supabase-js@2.39.0';
+import { SYSTEM_USER_ID } from '../../../constants.ts';
 
 // Create Supabase client for health checks
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -168,7 +169,7 @@ const getMockAssignments = (statuses?: string[]) => {
       status: 'in_progress',
       priority: 'high',
       progress: 45,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 16,
       assignee: 'Database Team'
@@ -180,7 +181,7 @@ const getMockAssignments = (statuses?: string[]) => {
       status: 'review',
       priority: 'medium',
       progress: 90,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 12,
       assignee: 'Backend Team'
@@ -192,7 +193,7 @@ const getMockAssignments = (statuses?: string[]) => {
       status: 'todo',
       priority: 'high',
       progress: 0,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 20,
       assignee: 'DevOps Team'
@@ -204,7 +205,7 @@ const getMockAssignments = (statuses?: string[]) => {
       status: 'in_progress',
       priority: 'critical',
       progress: 75,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 8,
       assignee: 'Security Team'
@@ -216,7 +217,7 @@ const getMockAssignments = (statuses?: string[]) => {
       status: 'todo',
       priority: 'medium',
       progress: 10,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 6,
       assignee: 'Network Team'
@@ -228,7 +229,7 @@ const getMockAssignments = (statuses?: string[]) => {
       status: 'review',
       priority: 'medium',
       progress: 100,
-      created_by: 'system',
+      created_by: SYSTEM_USER_ID,
       created_at: new Date().toISOString(),
       estimated_hours: 4,
       assignee: 'Database Team'
@@ -339,7 +340,7 @@ app.post('/make-server-a7530657/assignments', async (c) => {
       status: assignmentData.status || 'todo',
       priority: assignmentData.priority || 'medium',
       progress: assignmentData.progress || 0,
-      created_by: assignmentData.created_by || 'system',
+      created_by: assignmentData.created_by || SYSTEM_USER_ID,
       due_at: assignmentData.due_at || null,
       estimated_hours: assignmentData.estimated_hours || null,
       assignee: assignmentData.assignee || null
