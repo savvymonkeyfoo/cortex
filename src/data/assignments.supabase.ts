@@ -13,6 +13,32 @@ import type {
 // Since we can't directly use Supabase client in this environment,
 // we'll make requests to our server endpoints instead.
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { createClient } from '@supabase/supabase-js';
+
+// Minimal Supabase client to fetch identity information
+const supabaseUrl = `https://${projectId}.supabase.co`;
+const supabase = createClient(supabaseUrl, publicAnonKey, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+});
+
+const DEV_ORG_ID = '00000000-0000-0000-0000-000000000001';
+
+function devUuid(key: string) {
+  const k = `cortex_dev_${key}`;
+  let v = localStorage.getItem(k);
+  if (!v) {
+    v = crypto.randomUUID();
+    localStorage.setItem(k, v);
+  }
+  return v;
+}
+
+async function getIdentity() {
+  const { data } = await supabase.auth.getUser();
+  const userId = data.user?.id || devUuid('user');
+  const orgId = localStorage.getItem('cortex_org_id') || DEV_ORG_ID;
+  return { userId, orgId };
+}
 
 const SERVER_BASE_URL = `https://${projectId}.supabase.co/functions/v1/make-server-a7530657`;
 
@@ -302,24 +328,29 @@ export const supabaseRepo: AssignmentsRepo = {
   },
 
   async create(assignment: Omit<Assignment, 'id' | 'created_at'>): Promise<Assignment> {
+    const { userId, orgId } = await getIdentity();
+    const payload = { ...assignment, created_by: userId, org_id: orgId };
     const dbAssignment: DatabaseAssignment = await makeRequest('/assignments', {
       method: 'POST',
-      body: JSON.stringify(assignment),
+      body: JSON.stringify(payload),
     });
     return convertToLegacyAssignment(dbAssignment);
   },
 
   async update(id: string, assignment: Partial<Assignment>): Promise<Assignment> {
     console.log('🔄 supabaseRepo.update called with:', { id, assignment });
-    
+
+    const { userId, orgId } = await getIdentity();
+
     // Convert legacy Assignment format to DatabaseAssignment format for the API
-    const dbUpdates: Partial<DatabaseAssignment> = {
+    const dbUpdates: (Partial<DatabaseAssignment> & { org_id?: string }) = {
       title: assignment.title,
       description: assignment.description,
       status: assignment.status,
       priority: assignment.priority,
       progress: assignment.progress,
-      created_by: assignment.created_by,
+      created_by: userId,
+      org_id: orgId,
       // Convert assignees array back to single assignee if present
       assignee: assignment.assignees?.[0] || null,
       due_at: assignment.due_at,
@@ -331,19 +362,19 @@ export const supabaseRepo: AssignmentsRepo = {
       waiting_on_avatar_url: assignment.waiting_on_avatar_url,
       waiting_on_note: assignment.waiting_on_note,
     };
-    
+
     // Remove undefined values to avoid sending them
     const cleanUpdates = Object.fromEntries(
       Object.entries(dbUpdates).filter(([_, value]) => value !== undefined)
     );
-    
+
     console.log('📤 Sending database updates:', cleanUpdates);
-    
+
     const dbAssignment: DatabaseAssignment = await makeRequest(`/assignments/${id}`, {
       method: 'PUT',
       body: JSON.stringify(cleanUpdates),
     });
-    
+
     console.log('📥 Received database response:', dbAssignment);
     return convertToLegacyAssignment(dbAssignment);
   },
