@@ -212,8 +212,8 @@ export default function App() {
   const handleConversationCreated = (conversationId: string) => {
     console.log('App: New conversation created with ID:', conversationId);
     setActiveConversationId(conversationId);
-    setCurrentView("conversation");
-    
+    // Avoid remount flicker when starting from New Chat / Workspace
+    setCurrentView((prev) => (prev === "new-chat" || prev === "chat-workspace" ? prev : "conversation"));
     // Trigger refresh of navigation data to show new chat in Chats section
     setNavigationRefreshTrigger(prev => prev + 1);
   };

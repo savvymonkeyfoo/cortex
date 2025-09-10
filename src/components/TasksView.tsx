@@ -137,10 +137,9 @@ function DraggableAssignmentCard({ assignment, status, isDragging }: DraggableAs
 
   const cardClass = `
     ${isCurrentlyDragging ? 'opacity-60 scale-105 rotate-2 shadow-2xl z-50' : 'opacity-100 scale-100 rotate-0'}
-    ${!isCurrentlyDragging ? 'hover:scale-105 hover:-translate-y-1' : ''}
     transition-all duration-200 ease-in-out cursor-grab active:cursor-grabbing
     ${isCurrentlyDragging ? 'pointer-events-none' : ''}
-  `;
+  `; // Hover/scale handled centrally in CSS to avoid overflow
 
   return (
     <div 

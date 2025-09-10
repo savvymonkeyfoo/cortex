@@ -34,13 +34,13 @@ const mockAssignments: Assignment[] = [
     actual_hours: 14,
     // Approval chain and waiting_on fields
     approval_chain: [
-      {"id":"u_42","name":"Alex Chen","role":"Operations Lead","avatar_url":null,"status":"pending","note":"Sign-off needed"},
-      {"id":"u_17","name":"Priya Patel","role":"Security","avatar_url":null,"status":"waiting"}
+      {"id":"user-1","name":"Sarah Chen","role":"Senior DevOps Engineer","avatar_url":"https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face","status":"pending","note":"Sign-off needed"},
+      {"id":"user-2","name":"Marcus Rodriguez","role":"Security Lead","avatar_url":"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face","status":"waiting"}
     ],
-    waiting_on_id: "u_42",
-    waiting_on_name: "Alex Chen",
-    waiting_on_role: "Operations Lead",
-    waiting_on_avatar_url: null,
+    waiting_on_id: "user-1",
+    waiting_on_name: "Sarah Chen",
+    waiting_on_role: "Senior DevOps Engineer",
+    waiting_on_avatar_url: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
     waiting_on_note: "Sign-off needed"
   },
   {
@@ -100,6 +100,30 @@ const mockAssignments: Assignment[] = [
     tags: ["ssl", "certificates", "security"],
     due_at: "2024-01-11T17:00:00Z",
     estimated_hours: 4
+  },
+  {
+    id: "7",
+    title: "Database backup verification",
+    description: "Verify integrity and recovery procedures for all backups",
+    status: "review",
+    priority: "medium",
+    progress: 80,
+    created_by: "system",
+    created_at: "2024-01-10T12:00:00Z",
+    assignees: ["database-team"],
+    tags: ["database", "backup", "verification"],
+    due_at: "2024-01-13T17:00:00Z",
+    estimated_hours: 4,
+    actual_hours: 3,
+    // Approval chain and waiting_on fields
+    approval_chain: [
+      {"id":"user-3","name":"Emily Johnson","role":"Database Administrator","avatar_url":"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face","status":"pending","note":"Final approval needed"}
+    ],
+    waiting_on_id: "user-3",
+    waiting_on_name: "Emily Johnson",
+    waiting_on_role: "Database Administrator",
+    waiting_on_avatar_url: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    waiting_on_note: "Final approval needed"
   }
 ];
 

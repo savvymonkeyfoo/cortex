@@ -37,6 +37,7 @@ import {
   DropdownMenuSubTrigger
 } from "./ui/dropdown-menu";
 import { db, type Workspace, type Conversation } from "../utils/supabase/client";
+import { useTriageAssignments } from "../hooks/useTriageAssignments";
 
 type ViewType = "control-centre" | "triage" | "conversations" | "assignments" | "live-assignments" | "assignment-archive" | "roster" | "admin" | 
   "new-chat" | "chat-workspace" | "search-chats" | "supervisor" | "network-troubleshooting" | "network-monitoring" |
@@ -101,6 +102,12 @@ export function LeftNavigation({
       setChatsData(prev => ({ ...prev, expanded }));
     }
   });
+
+  // Triage count sourced from the same hook as TriageView
+  const { assignments: triageAssignments } = useTriageAssignments();
+  const triageCount = triageAssignments.filter(a =>
+    ["review", "awaiting_review", "needs_review", "waiting_review"].includes(a.status)
+  ).length;
 
   // Load data from database
   useEffect(() => {
@@ -338,7 +345,7 @@ export function LeftNavigation({
       icon: Inbox, 
       label: "Triage", 
       view: "triage" as ViewType,
-      badge: "12",
+      badge: String(triageCount),
       expandable: false
     },
     { 

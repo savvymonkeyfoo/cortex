@@ -1,22 +1,33 @@
+import { createClient } from '@supabase/supabase-js';
 import { projectId, publicAnonKey } from './info';
 
-// Database types
+// Supabase client (browser)
+const supabaseUrl = `https://${projectId}.supabase.co`;
+const supabase = createClient(supabaseUrl, publicAnonKey, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+});
+
+// Types used by the app
 export interface Workspace {
   id: string;
   name: string;
-  icon: string;
+  icon: string | null;
   created_at: string;
   updated_at: string;
+  created_by?: string | null;
+  org_id?: string | null;
 }
 
 export interface Conversation {
   id: string;
   title: string;
-  workspace_id?: string;
+  workspace_id?: string | null;
   created_at: string;
   updated_at: string;
   is_archived: boolean;
-  last_message_at?: string;
+  last_message_at?: string | null;
+  created_by?: string | null;
+  org_id?: string | null;
 }
 
 export interface Message {
@@ -25,8 +36,10 @@ export interface Message {
   content: string;
   sender: 'user' | 'assistant' | 'system';
   timestamp: string;
-  mentioned_agents?: string[];
+  mentioned_agents?: string[] | null;
   assignment_data?: any;
+  created_by?: string | null;
+  org_id?: string | null;
 }
 
 export interface Assignment {
@@ -37,266 +50,213 @@ export interface Assignment {
   due_date?: string | null;
   priority: string;
   progress: number;
-  assignees: Array<{id: string; label: string}>;
-  tags: string[];
-  est_hours: number;
-  actual_hours: number;
+  assignees?: Array<{ id: string; label: string }>;
+  tags?: string[];
+  est_hours?: number;
+  actual_hours?: number;
   conversation_id?: string | null;
   context_mode?: string | null;
   created_at: string;
   updated_at: string;
+  created_by?: string | null;
+  owner_id?: string | null;
+  org_id?: string | null;
 }
 
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
+// Identity helper: pull auth uid/org or use dev fallbacks
+const DEV_ORG_ID = '00000000-0000-0000-0000-000000000001';
+function devUuid(key: string) {
+  const k = `cortex_dev_${key}`;
+  let v = localStorage.getItem(k);
+  if (!v) {
+    v = crypto.randomUUID();
+    localStorage.setItem(k, v);
+  }
+  return v;
 }
 
-class SupabaseClient {
-  private baseUrl: string;
-  private headers: Record<string, string>;
-
-  constructor() {
-    this.baseUrl = `https://${projectId}.supabase.co/functions/v1/make-server-a7530657`;
-    this.headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${publicAnonKey}`,
-    };
-    
-    // Silent initialization - no console logging for development
-    // Backend features will gracefully fall back to empty arrays/mock data
-  }
-
-  private async request<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
-    try {
-      // Silent API requests for clean development experience
-      
-      // Create timeout controller for better cross-browser support
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-      
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        ...options,
-        headers: {
-          ...this.headers,
-          ...options?.headers,
-        },
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        const errorText = await response.text().catch(() => 'Unable to read error response');
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      // Silent error handling for clean development experience
-      
-      // Provide more specific error messages
-      let errorMessage = 'Unknown error';
-      if (error instanceof Error) {
-        if (error.name === 'AbortError' || error.message.includes('timeout')) {
-          errorMessage = 'Request timeout - backend may be slow or unavailable';
-        } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-          errorMessage = 'Network error - unable to connect to backend server';
-        } else {
-          errorMessage = error.message;
-        }
-      }
-      
-      return {
-        success: false,
-        error: errorMessage,
-      };
-    }
-  }
-
-  // Workspace methods
-  async getWorkspaces(): Promise<Workspace[]> {
-    const response = await this.request<Workspace[]>('/workspaces');
-    if (!response.success) {
-      // Return empty array instead of failing completely - silent for development
-      return [];
-    }
-    return response.data || [];
-  }
-
-  async createWorkspace(name: string, icon: string): Promise<Workspace | null> {
-    const response = await this.request<Workspace>('/workspaces', {
-      method: 'POST',
-      body: JSON.stringify({ name, icon }),
-    });
-    return response.success ? (response.data || null) : null;
-  }
-
-  async updateWorkspace(workspaceId: string, updates: Partial<Workspace>): Promise<Workspace | null> {
-    const response = await this.request<Workspace>(`/workspaces/${workspaceId}`, {
-      method: 'PUT',
-      body: JSON.stringify(updates),
-    });
-    return response.success ? (response.data || null) : null;
-  }
-
-  async deleteWorkspace(workspaceId: string): Promise<boolean> {
-    const response = await this.request<void>(`/workspaces/${workspaceId}`, {
-      method: 'DELETE',
-    });
-    return response.success;
-  }
-
-  // Conversation methods
-  async getConversations(workspaceId?: string): Promise<Conversation[]> {
-    const queryParams = workspaceId ? `?workspace_id=${workspaceId}` : '';
-    const response = await this.request<Conversation[]>(`/conversations${queryParams}`);
-    if (!response.success) {
-      // Return empty array instead of failing completely - silent for development
-      return [];
-    }
-    return response.data || [];
-  }
-
-  async getConversationById(conversationId: string): Promise<Conversation | null> {
-    const response = await this.request<Conversation>(`/conversations/${conversationId}`);
-    return response.success ? (response.data || null) : null;
-  }
-
-  async createConversation(title: string, workspaceId?: string): Promise<Conversation | null> {
-    const response = await this.request<Conversation>('/conversations', {
-      method: 'POST',
-      body: JSON.stringify({ title, workspace_id: workspaceId }),
-    });
-    return response.success ? (response.data || null) : null;
-  }
-
-  async updateConversation(conversationId: string, updates: Partial<Conversation>): Promise<Conversation | null> {
-    const response = await this.request<Conversation>(`/conversations/${conversationId}`, {
-      method: 'PUT',
-      body: JSON.stringify(updates),
-    });
-    return response.success ? (response.data || null) : null;
-  }
-
-  async deleteConversation(conversationId: string): Promise<boolean> {
-    const response = await this.request<void>(`/conversations/${conversationId}`, {
-      method: 'DELETE',
-    });
-    return response.success;
-  }
-
-  // Message methods
-  async getMessages(conversationId: string): Promise<Message[]> {
-    const response = await this.request<Message[]>(`/conversations/${conversationId}/messages`);
-    return response.success ? (response.data || []) : [];
-  }
-
-  async createMessage(
-    conversationId: string,
-    content: string,
-    sender: 'user' | 'assistant' | 'system',
-    mentionedAgents?: string[],
-    assignmentData?: any
-  ): Promise<Message | null> {
-    const response = await this.request<Message>(`/conversations/${conversationId}/messages`, {
-      method: 'POST',
-      body: JSON.stringify({
-        content,
-        sender,
-        mentioned_agents: mentionedAgents,
-        assignment_data: assignmentData,
-      }),
-    });
-    return response.success ? (response.data || null) : null;
-  }
-
-  async deleteMessage(messageId: string): Promise<boolean> {
-    const response = await this.request<void>(`/messages/${messageId}`, {
-      method: 'DELETE',
-    });
-    return response.success;
-  }
-
-  // Assignment operations
-  async createAssignment(assignmentData: Omit<Assignment, 'id' | 'created_at' | 'updated_at'>): Promise<Assignment | null> {
-    const response = await this.request<Assignment>('/assignments', {
-      method: 'POST',
-      body: JSON.stringify(assignmentData),
-    });
-    return response.success ? (response.data || null) : null;
-  }
-
-  async getAssignments(): Promise<Assignment[]> {
-    const response = await this.request<Assignment[]>('/assignments');
-    return response.success ? (response.data || []) : [];
-  }
-
-  async getAssignmentById(assignmentId: string): Promise<Assignment | null> {
-    const response = await this.request<Assignment>(`/assignments/${assignmentId}`);
-    return response.success ? (response.data || null) : null;
-  }
-
-  async updateAssignment(assignmentId: string, updates: Partial<Assignment>): Promise<Assignment | null> {
-    const response = await this.request<Assignment>(`/assignments/${assignmentId}`, {
-      method: 'PUT',
-      body: JSON.stringify(updates),
-    });
-    return response.success ? (response.data || null) : null;
-  }
-
-  async deleteAssignment(assignmentId: string): Promise<boolean> {
-    const response = await this.request<void>(`/assignments/${assignmentId}`, {
-      method: 'DELETE',
-    });
-    return response.success;
-  }
+async function getIdentity() {
+  const { data } = await supabase.auth.getUser();
+  const userId = data.user?.id || devUuid('user');
+  const orgId = localStorage.getItem('cortex_org_id') || DEV_ORG_ID;
+  return { userId, orgId };
 }
 
-// Singleton instance
-export const supabaseClient = new SupabaseClient();
-
-// Utility functions for easier usage
+// db facade rewritten to target tables directly
 export const db = {
   workspaces: {
-    getAll: () => supabaseClient.getWorkspaces(),
-    create: (name: string, icon: string) => supabaseClient.createWorkspace(name, icon),
-    update: (id: string, updates: Partial<Workspace>) => supabaseClient.updateWorkspace(id, updates),
-    delete: (id: string) => supabaseClient.deleteWorkspace(id),
+    getAll: async (): Promise<Workspace[]> => {
+      const { data, error } = await supabase
+        .from('workspaces')
+        .select('id, name, icon, created_at, updated_at')
+        .order('created_at', { ascending: false });
+      if (error) return [];
+      return data as Workspace[];
+    },
+    create: async (name: string, icon: string): Promise<Workspace | null> => {
+      const { userId, orgId } = await getIdentity();
+      const { data, error } = await supabase
+        .from('workspaces')
+        .insert({ name, icon, created_by: userId, org_id: orgId })
+        .select('*')
+        .single();
+      return error ? null : (data as Workspace);
+    },
+    update: async (id: string, updates: Partial<Workspace>): Promise<Workspace | null> => {
+      const { data, error } = await supabase
+        .from('workspaces')
+        .update(updates)
+        .eq('id', id)
+        .select('*')
+        .single();
+      return error ? null : (data as Workspace);
+    },
+    delete: async (id: string): Promise<boolean> => {
+      const { error } = await supabase.from('workspaces').delete().eq('id', id);
+      return !error;
+    },
   },
+
   conversations: {
-    getAll: (workspaceId?: string) => supabaseClient.getConversations(workspaceId),
-    getById: (id: string) => supabaseClient.getConversationById(id),
-    create: (title: string, workspaceId?: string) => supabaseClient.createConversation(title, workspaceId),
-    update: (id: string, updates: Partial<Conversation>) => supabaseClient.updateConversation(id, updates),
-    delete: (id: string) => supabaseClient.deleteConversation(id),
+    getAll: async (workspaceId?: string): Promise<Conversation[]> => {
+      const query = supabase
+        .from('conversations')
+        .select('id, title, workspace_id, created_at, updated_at, is_archived, last_message_at')
+        .order('last_message_at', { ascending: false, nullsFirst: false })
+        .order('created_at', { ascending: false });
+      const { data, error } = workspaceId
+        ? await query.eq('workspace_id', workspaceId)
+        : await query.is('workspace_id', null);
+      if (error) return [];
+      return data as Conversation[];
+    },
+    getById: async (id: string): Promise<Conversation | null> => {
+      const { data, error } = await supabase
+        .from('conversations')
+        .select('*')
+        .eq('id', id)
+        .single();
+      return error ? null : (data as Conversation);
+    },
+    create: async (title: string, workspaceId?: string): Promise<Conversation | null> => {
+      const { userId, orgId } = await getIdentity();
+      const payload: any = { title, created_by: userId, org_id: orgId };
+      if (workspaceId) payload.workspace_id = workspaceId;
+      const { data, error } = await supabase
+        .from('conversations')
+        .insert(payload)
+        .select('*')
+        .single();
+      return error ? null : (data as Conversation);
+    },
+    update: async (id: string, updates: Partial<Conversation>): Promise<Conversation | null> => {
+      const { data, error } = await supabase
+        .from('conversations')
+        .update(updates)
+        .eq('id', id)
+        .select('*')
+        .single();
+      return error ? null : (data as Conversation);
+    },
+    delete: async (id: string): Promise<boolean> => {
+      const { error } = await supabase.from('conversations').delete().eq('id', id);
+      return !error;
+    },
   },
+
   messages: {
-    getAll: (conversationId: string) => supabaseClient.getMessages(conversationId),
-    create: (
+    getAll: async (conversationId: string): Promise<Message[]> => {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('id, conversation_id, content, sender, timestamp, mentioned_agents, assignment_data')
+        .eq('conversation_id', conversationId)
+        .order('timestamp', { ascending: true });
+      if (error) return [];
+      return data as Message[];
+    },
+    create: async (
       conversationId: string,
       content: string,
       sender: 'user' | 'assistant' | 'system',
       mentionedAgents?: string[],
       assignmentData?: any
-    ) => supabaseClient.createMessage(conversationId, content, sender, mentionedAgents, assignmentData),
-    delete: (id: string) => supabaseClient.deleteMessage(id),
+    ): Promise<Message | null> => {
+      const { userId, orgId } = await getIdentity();
+      const { data, error } = await supabase
+        .from('messages')
+        .insert({
+          conversation_id: conversationId,
+          content,
+          sender,
+          mentioned_agents: mentionedAgents || [],
+          assignment_data: assignmentData || null,
+          created_by: userId,
+          org_id: orgId,
+        })
+        .select('*')
+        .single();
+      return error ? null : (data as Message);
+    },
+    delete: async (id: string): Promise<boolean> => {
+      const { error } = await supabase.from('messages').delete().eq('id', id);
+      return !error;
+    },
   },
+
   assignments: {
-    getAll: () => supabaseClient.getAssignments(),
-    getById: (id: string) => supabaseClient.getAssignmentById(id),
-    create: (assignmentData: Omit<Assignment, 'id' | 'created_at' | 'updated_at'>) => supabaseClient.createAssignment(assignmentData),
-    update: (id: string, updates: Partial<Assignment>) => supabaseClient.updateAssignment(id, updates),
-    delete: (id: string) => supabaseClient.deleteAssignment(id),
+    getAll: async (): Promise<Assignment[]> => {
+      const { data, error } = await supabase
+        .from('assignments')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) return [];
+      return data as Assignment[];
+    },
+    getById: async (id: string): Promise<Assignment | null> => {
+      const { data, error } = await supabase
+        .from('assignments')
+        .select('*')
+        .eq('id', id)
+        .single();
+      return error ? null : (data as Assignment);
+    },
+    create: async (assignmentData: Partial<Assignment>): Promise<Assignment | null> => {
+      const { userId, orgId } = await getIdentity();
+      const payload = {
+        title: assignmentData.title || 'New Task',
+        description: assignmentData.description || '',
+        status: assignmentData.status || 'in_progress',
+        priority: assignmentData.priority || 'high',
+        progress: assignmentData.progress ?? 0,
+        created_by: userId,
+        owner_id: userId,
+        org_id: orgId,
+        due_date: assignmentData.due_date || null,
+      } as any;
+      const { data, error } = await supabase
+        .from('assignments')
+        .insert(payload)
+        .select('*')
+        .single();
+      return error ? null : (data as Assignment);
+    },
+    update: async (id: string, updates: Partial<Assignment>): Promise<Assignment | null> => {
+      const { data, error } = await supabase
+        .from('assignments')
+        .update(updates)
+        .eq('id', id)
+        .select('*')
+        .single();
+      return error ? null : (data as Assignment);
+    },
+    delete: async (id: string): Promise<boolean> => {
+      const { error } = await supabase.from('assignments').delete().eq('id', id);
+      return !error;
+    },
     onChanges: (callback: (payload: any) => void) => {
-      // Simple polling mechanism for now - can be enhanced with real-time subscriptions
-      const interval = setInterval(async () => {
-        // This is a placeholder for real-time functionality
-        // In a production app, you'd use WebSockets or Server-Sent Events
-      }, 5000);
-      return { unsubscribe: () => clearInterval(interval) };
-    }
+      // Placeholder polling; replace with supabase.realtime if enabled
+      const handle = setInterval(() => {}, 5000);
+      return { unsubscribe: () => clearInterval(handle) };
+    },
   },
 };

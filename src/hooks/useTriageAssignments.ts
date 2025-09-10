@@ -2,6 +2,8 @@
 import { useEffect, useState, useMemo } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+// Fallback to the same repo used by Live Assignments so Triage mirrors "In Review"
+import { repo, type Assignment, type TaskStatus } from '../data/repo';
 
 // Use the existing Supabase configuration
 const supabaseUrl = `https://${projectId}.supabase.co`;
@@ -127,7 +129,37 @@ export function useTriageAssignments() {
           throw error;
         }
 
-        if (!cancelled) {
+        // If DB returned no rows, fall back to repo (same source as Live Assignments)
+        if (!data || data.length === 0) {
+          try {
+            const reviewStatuses: TaskStatus[] = ["review"] as TaskStatus[];
+            const repoAssignments: Assignment[] = await repo.list({ statuses: reviewStatuses });
+
+            const transformed: DBRow[] = repoAssignments.map((a) => ({
+              id: a.id,
+              assignment_id: a.id,
+              owner_id: "system",
+              status: a.status,
+              created_at: a.created_at,
+              updated_at: a.created_at,
+              title: a.title,
+              assignees: Array.isArray(a.assignees) ? a.assignees : (a.assignees ? [a.assignees as any] : null),
+            }));
+
+            if (!cancelled) {
+              setAssignments(transformed);
+              // If ids look like mock data, tag as demo for the UI badge
+              const isDemo = repoAssignments.some((a) => String(a.id).startsWith("mock-"));
+              setSource(isDemo ? "demo" : "db");
+            }
+          } catch (fallbackErr) {
+            console.log("Fallback to repo failed, using demo data:", fallbackErr);
+            if (!cancelled) {
+              setAssignments(getDemoAssignments());
+              setSource("demo");
+            }
+          }
+        } else if (!cancelled) {
           setAssignments(data ?? []);
           setSource("db");
         }

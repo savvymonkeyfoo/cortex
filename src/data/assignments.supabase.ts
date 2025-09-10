@@ -133,8 +133,16 @@ function convertToLegacyStep(dbStep: DatabaseStep): Step {
   };
 }
 
+// Import users data
+import { users, getRandomUser } from './users';
+
 // Fallback mock data
 const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
+  // Get specific users for consistent reviewer assignments
+  const sarahChen = users.find(u => u.name === "Sarah Chen");
+  const emilyJohnson = users.find(u => u.name === "Emily Johnson");
+  const marcusRodriguez = users.find(u => u.name === "Marcus Rodriguez");
+  
   const mockData: Assignment[] = [
     {
       id: 'mock-1',
@@ -161,6 +169,11 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       estimated_hours: 12,
       assignees: ['Backend Team'],
       tags: [],
+      // Assign to Sarah Chen for review
+      waiting_on_id: sarahChen?.id,
+      waiting_on_name: sarahChen?.name,
+      waiting_on_role: sarahChen?.role,
+      waiting_on_avatar_url: sarahChen?.avatar_url,
     },
     {
       id: 'mock-3',
@@ -207,12 +220,17 @@ const getMockAssignments = (statuses?: TaskStatus[]): Assignment[] => {
       description: 'Verify integrity and recovery procedures for all backups',
       status: 'review',
       priority: 'medium',
-      progress: 100,
+      progress: 80,
       created_by: 'system',
       created_at: new Date().toISOString(),
       estimated_hours: 4,
       assignees: ['Database Team'],
       tags: [],
+      // Assign to Emily Johnson for review
+      waiting_on_id: emilyJohnson?.id,
+      waiting_on_name: emilyJohnson?.name,
+      waiting_on_role: emilyJohnson?.role,
+      waiting_on_avatar_url: emilyJohnson?.avatar_url,
     }
   ];
 

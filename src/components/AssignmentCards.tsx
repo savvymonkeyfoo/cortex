@@ -304,8 +304,7 @@ function ReviewCardSummary({
             )}
           </Avatar>
           <span className="text-xs font-semibold text-yellow-900 dark:text-yellow-100">
-            Waiting on: {reviewerName}
-            {reviewerRole ? ` (${reviewerRole})` : ""}
+            Waiting for review: {reviewerName}
           </span>
         </div>
 
@@ -335,7 +334,7 @@ function ReviewCardSummary({
         {/* Review status callout */}
         <div className="rounded-xl border bg-muted/50 px-3 py-2">
           <div className="text-xs text-muted-foreground">
-            Waiting for Review: <span className="font-medium text-foreground">{reviewerName}</span>
+            Waiting for review: <span className="font-medium text-foreground">{reviewerName}</span>
             {reviewerRole ? ` (${reviewerRole})` : ""}. Please review.
           </div>
         </div>

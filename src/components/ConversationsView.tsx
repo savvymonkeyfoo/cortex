@@ -114,6 +114,25 @@ export function ConversationsView({
   const [error, setError] = useState<string | null>(null);
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(conversationId || null);
 
+  // Local persistence for messages that failed to save to backend
+  const getPendingKey = (convId: string) => `pending_messages_${convId}`;
+  const addPendingMessage = (convId: string, msg: { content: string; sender: 'user'|'assistant'|'system'; timestamp: string; mentionedAgents?: string[] }) => {
+    try {
+      const key = getPendingKey(convId);
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push(msg);
+      localStorage.setItem(key, JSON.stringify(arr));
+    } catch {}
+  };
+  const popAllPending = (convId: string) => {
+    try {
+      const key = getPendingKey(convId);
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      localStorage.removeItem(key);
+      return Array.isArray(arr) ? arr : [];
+    } catch { return []; }
+  };
+
   // Update currentConversationId when conversationId prop changes
   useEffect(() => {
     setCurrentConversationId(conversationId || null);
@@ -180,6 +199,34 @@ export function ConversationsView({
       }));
       
       setMessages(formattedMessages);
+
+      // Reconcile any pending local-only messages (e.g., first user message not saved)
+      const pending = popAllPending(currentConversationId);
+      if (pending.length > 0) {
+        for (const p of pending) {
+          try {
+            const saved = await db.messages.create(currentConversationId, p.content, p.sender as any, p.mentionedAgents);
+            const formatted = saved ? {
+              id: saved.id,
+              content: saved.content,
+              sender: saved.sender as 'user'|'assistant'|'system',
+              timestamp: new Date(saved.timestamp),
+              mentionedAgents: saved.mentioned_agents || [],
+              assignment: saved.assignment_data || undefined
+            } : {
+              id: crypto.randomUUID(),
+              content: p.content,
+              sender: p.sender as any,
+              timestamp: new Date(p.timestamp),
+              mentionedAgents: p.mentionedAgents || []
+            } as ExtendedChatMessage;
+            setMessages(prev => [formatted, ...prev]);
+          } catch (e) {
+            // If still failing, push back to pending so it's not lost
+            addPendingMessage(currentConversationId, p);
+          }
+        }
+      }
     } catch (error) {
       console.error('Error loading conversation:', error);
       // Check if it's a 404 error (conversation not found)
@@ -223,6 +270,48 @@ export function ConversationsView({
     }
   ];
 
+  // Generate a persona-tailored response based on the selected agent
+  const generatePersonaResponse = (persona: string, userText: string) => {
+    const lower = userText.toLowerCase();
+    switch (persona) {
+      case "DevOps Supervisor": {
+        const hints = [
+          "I can coordinate CI/CD and incident triage.",
+          "I’ll suggest owners, create a task, and track status.",
+          "I’ll link relevant runbooks and dashboards for you."
+        ];
+        // light heuristic prompts
+        if (/(deploy|release|rollback)/.test(lower)) {
+          return `Got it. I’ll review the latest pipeline runs, assess risk, and outline a rollback plan if needed. ${hints[1]}`;
+        }
+        if (/(incident|outage|sev|major)/.test(lower)) {
+          return `Understood. I’ll start an incident timeline, propose stakeholders to page, and surface high-signal logs and alerts. ${hints[2]}`;
+        }
+        return `I understand. ${hints[0]} Tell me the goal or repo/service and any deadlines; I’ll propose next steps.`;
+      }
+      case "Network Troubleshooting": {
+        if (/(latency|packet|loss|timeout|slow|jitter)/.test(lower)) {
+          return "Let’s triage latency: 1) confirm scope and clients, 2) run ping/traceroute from affected subnets, 3) check interface errors and queue drops, 4) compare path in and out of the region, 5) review recent changes. Share any traces and I’ll summarize root-cause candidates.";
+        }
+        if (/(dns|resolve|name|lookup)/.test(lower)) {
+          return "DNS issue suspected: verify authoritative records, TTLs, split-horizon settings, resolver health, and EDNS/DoH behavior. Provide a failing name + client IP; I’ll walk through checks.";
+        }
+        return "Give me symptoms (who/where/when), recent changes, and any probes (ping, mtr, traceroute). I’ll outline likely causes and a focused test plan.";
+      }
+      case "Network Cost Management": {
+        if (/(egress|transfer|data out|cdn)/.test(lower)) {
+          return "Egress optimization: identify top talkers, evaluate cacheability, enable compression, and consider regionalization/peering or a CDN tier. I can draft a savings estimate and rollout plan.";
+        }
+        if (/(nat|gateway|firewall|load balancer|lb)/.test(lower)) {
+          return "Gateway/LB spend: check idle/overprovisioned tiers, consolidate listeners, right-size instances, and use savings plans/committed use. Share current SKUs; I’ll propose right-sizing.";
+        }
+        return "I can break down network spend by service, region, and tag, then suggest right‑sizing, reserved/committed use, and architecture tweaks to cut egress. Tell me your cloud/provider and target savings.";
+      }
+      default:
+        return "Thanks for the message! I'm processing your request now.";
+    }
+  };
+
   const getAgentInfo = (agentType?: string) => {
     switch (agentType) {
       case "supervisor":
@@ -241,10 +330,10 @@ export function ConversationsView({
         };
       case "network-monitoring":
         return {
-          name: "Network Monitoring Agent",
+          name: "Network Cost Management Agent",
           icon: Monitor,
           color: "text-ai-accent",
-          description: "Real-time network health and performance monitoring"
+          description: "Spend analysis, right-sizing, and egress optimization"
         };
       default:
         return {
@@ -521,20 +610,27 @@ export function ConversationsView({
         const newConversation = await db.conversations.create(title);
         
         if (!newConversation) {
-          setError('Failed to create new conversation. Please try again.');
-          return;
+          // Fallback: create a local-only conversation to keep UX responsive
+          const localId = crypto.randomUUID();
+          const localConv = {
+            id: localId,
+            title,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            is_archived: false
+          } as unknown as Conversation;
+          activeConversationId = localId;
+          setCurrentConversationId(activeConversationId);
+          setConversation(localConv);
+          if (onConversationCreated) onConversationCreated(activeConversationId);
+          console.warn('ConversationsView: Backend create failed; using local conversation id', localId);
+        } else {
+          activeConversationId = newConversation.id;
+          setCurrentConversationId(activeConversationId);
+          setConversation(newConversation);
+          if (onConversationCreated) onConversationCreated(activeConversationId);
+          console.log('ConversationsView: Created new conversation with ID:', activeConversationId);
         }
-        
-        activeConversationId = newConversation.id;
-        setCurrentConversationId(activeConversationId);
-        setConversation(newConversation);
-        
-        // Notify parent component about the new conversation
-        if (onConversationCreated) {
-          onConversationCreated(activeConversationId);
-        }
-        
-        console.log('ConversationsView: Created new conversation with ID:', activeConversationId);
       }
       
       // Save user message to database
@@ -543,7 +639,7 @@ export function ConversationsView({
       
       // Check for assignment intent before normal AI response
       if (wantsAssignment(messageText)) {
-        // Save user message first
+        // Save user message first (fallback to local state if backend fails)
         const userMessage = await db.messages.create(
           activeConversationId,
           messageText,
@@ -551,18 +647,22 @@ export function ConversationsView({
           mentionedAgents
         );
         
-        if (userMessage) {
-          const formattedUserMessage = {
-            id: userMessage.id,
-            content: userMessage.content,
-            sender: userMessage.sender as 'user' | 'assistant' | 'system',
-            timestamp: new Date(userMessage.timestamp),
-            mentionedAgents: userMessage.mentioned_agents || [],
-            assignment: userMessage.assignment_data || undefined
-          };
-          
-          setMessages(prev => [...prev, formattedUserMessage]);
-        }
+        const formattedUserMessage: ExtendedChatMessage = userMessage ? {
+          id: userMessage.id,
+          content: userMessage.content,
+          sender: userMessage.sender as 'user' | 'assistant' | 'system',
+          timestamp: new Date(userMessage.timestamp),
+          mentionedAgents: userMessage.mentioned_agents || [],
+          assignment: userMessage.assignment_data || undefined
+        } : {
+          id: crypto.randomUUID(),
+          content: messageText,
+          sender: 'user',
+          timestamp: new Date(),
+          mentionedAgents
+        } as ExtendedChatMessage;
+        
+        setMessages(prev => [...prev, formattedUserMessage]);
 
         // assistant acknowledges
         const ack = await db.messages.create(activeConversationId, 
@@ -573,6 +673,10 @@ export function ConversationsView({
         if (ack) {
           setMessages(prev => [...prev, {
             id: ack.id, content: ack.content, sender: 'assistant', timestamp: new Date(ack.timestamp)
+          } as ExtendedChatMessage]);
+        } else {
+          setMessages(prev => [...prev, {
+            id: crypto.randomUUID(), content: "Absolutely — I'll set that up. Which chat context should I include?", sender: 'assistant', timestamp: new Date()
           } as ExtendedChatMessage]);
         }
 
@@ -598,31 +702,31 @@ export function ConversationsView({
         mentionedAgents
       );
       
-      if (userMessage) {
-        // Add to local state immediately for UI responsiveness
-        const formattedUserMessage = {
-          id: userMessage.id,
-          content: userMessage.content,
-          sender: userMessage.sender as 'user' | 'assistant' | 'system',
-          timestamp: new Date(userMessage.timestamp),
-          mentionedAgents: userMessage.mentioned_agents || [],
-          assignment: userMessage.assignment_data || undefined
-        };
-        
-        setMessages(prev => [...prev, formattedUserMessage]);
-        
-        // Simulate AI response (in a real app, this would come from your AI service)
+      // Add to local state immediately (even if backend save failed)
+      const localUserMsg: ExtendedChatMessage = userMessage ? {
+        id: userMessage.id,
+        content: userMessage.content,
+        sender: userMessage.sender as 'user' | 'assistant' | 'system',
+        timestamp: new Date(userMessage.timestamp),
+        mentionedAgents: userMessage.mentioned_agents || [],
+        assignment: userMessage.assignment_data || undefined
+      } : {
+        id: crypto.randomUUID(),
+        content: messageText,
+        sender: 'user',
+        timestamp: new Date(),
+        mentionedAgents,
+      } as ExtendedChatMessage;
+      
+      setMessages(prev => [...prev, localUserMsg]);
+      if (!userMessage) {
+        addPendingMessage(activeConversationId, { content: messageText, sender: 'user', timestamp: new Date().toISOString(), mentionedAgents });
+      }
+      
+      // Simulate AI response (in a real app, this would come from your AI service)
         setTimeout(async () => {
-          const responses = [
-            "I understand your request. Let me help you with that.",
-            "Thanks for the message! I'm processing your request now.",
-            "Got it! I'll work on this right away.",
-            "I see what you need. Let me gather the relevant information.",
-            "Perfect! I'm on it. I'll coordinate with the mentioned agents.",
-            "Understood. I'll handle this task and keep you updated."
-          ];
-          
-          const responseText = responses[Math.floor(Math.random() * responses.length)];
+          // Persona-specific simulated response
+          const responseText = generatePersonaResponse(selectedAgent, messageText);
           
           const aiMessage = await db.messages.create(
             activeConversationId,
@@ -630,17 +734,21 @@ export function ConversationsView({
             'assistant'
           );
           
-          if (aiMessage) {
-            const formattedAiMessage = {
-              id: aiMessage.id,
-              content: aiMessage.content,
-              sender: aiMessage.sender as 'user' | 'assistant' | 'system',
-              timestamp: new Date(aiMessage.timestamp),
-              mentionedAgents: aiMessage.mentioned_agents || [],
-              assignment: aiMessage.assignment_data || undefined
-            };
-            
-            setMessages(prev => {
+          const formattedAiMessage: ExtendedChatMessage = aiMessage ? {
+            id: aiMessage.id,
+            content: aiMessage.content,
+            sender: aiMessage.sender as 'user' | 'assistant' | 'system',
+            timestamp: new Date(aiMessage.timestamp),
+            mentionedAgents: aiMessage.mentioned_agents || [],
+            assignment: aiMessage.assignment_data || undefined
+          } : {
+            id: crypto.randomUUID(),
+            content: responseText,
+            sender: 'assistant',
+            timestamp: new Date(),
+          } as ExtendedChatMessage;
+          
+          setMessages(prev => {
               const newMessages = [...prev, formattedAiMessage];
               
               // After first interaction (user + assistant messages), ensure conversation has proper title and appears in navigation
@@ -670,9 +778,8 @@ export function ConversationsView({
               
               return newMessages;
             });
-          }
         }, 1500);
-      }
+      
     } catch (error) {
       console.error('Error sending message:', error);
       setError('Failed to send message. Please try again.');
@@ -866,6 +973,29 @@ export function ConversationsView({
                     Start a conversation with an AI agent
                   </p>
 
+                  {/* Inline persona selector for quick access */}
+                  <div className="mb-3 flex items-center justify-center gap-2 text-xs">
+                    <span className="text-muted-foreground">Assistant:</span>
+                    <Select value={selectedAgent} onValueChange={handleAgentChange}>
+                      <SelectTrigger className="w-auto min-w-[190px] h-7 text-xs bg-background-elevated border-border">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {agentOptions.map((agent) => {
+                          const AgentIcon = agent.icon;
+                          return (
+                            <SelectItem key={agent.id} value={agent.id}>
+                              <div className="flex items-center gap-2">
+                                <AgentIcon className={`h-4 w-4 ${agent.color}`} />
+                                <span>{agent.name}</span>
+                              </div>
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
                   <div className="masked-row flex items-center gap-2 rounded-2xl border px-3 py-2 shadow-sm">
                     {/* Plus (left) */}
                     <button
@@ -955,6 +1085,29 @@ export function ConversationsView({
 
             {/* Input area at bottom when messages exist */}
             {messages.length > 0 && (
+              <>
+              {/* Inline persona selector when chatting */}
+              <div className="mb-2 flex items-center gap-2 text-xs">
+                <span className="text-muted-foreground">Assistant:</span>
+                <Select value={selectedAgent} onValueChange={handleAgentChange}>
+                  <SelectTrigger className="w-auto min-w-[190px] h-7 text-xs bg-background-elevated border-border">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {agentOptions.map((agent) => {
+                      const AgentIcon = agent.icon;
+                      return (
+                        <SelectItem key={agent.id} value={agent.id}>
+                          <div className="flex items-center gap-2">
+                            <AgentIcon className={`h-4 w-4 ${agent.color}`} />
+                            <span>{agent.name}</span>
+                          </div>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="masked-row flex items-center gap-2 rounded-2xl border px-3 py-2 shadow-sm">
                 {/* Plus (left) */}
                 <button
@@ -987,6 +1140,7 @@ export function ConversationsView({
                   <Send className="h-4 w-4" />
                 </button>
               </div>
+              </>
             )}
           </div>
         </div>

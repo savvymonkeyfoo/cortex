@@ -4,8 +4,8 @@ import { mockRepo } from './assignments.mock';
 import { supabaseRepo } from './assignments.supabase';
 
 // Easy switch: Change this single line to switch between implementations
-// export const repo = mockRepo;
-export const repo = supabaseRepo;
+export const repo = mockRepo;
+// export const repo = supabaseRepo;
 
 // Re-export types for convenience
 export type { AssignmentsRepo, Assignment, Step, TaskStatus, TaskPriority } from './assignments';

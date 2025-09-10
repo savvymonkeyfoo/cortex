@@ -1,0 +1,14 @@
+
+> Cortex Control Centre@0.1.0 dev
+> vite --host 127.0.0.1 --port 5173 --strictPort
+
+
+  VITE v6.3.5  ready in 99 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+5:04:07 PM [vite] (client) hmr update /src/components/TriageView.tsx
+5:09:21 PM [vite] (client) hmr update /src/components/LeftNavigation.tsx
+5:17:37 PM [vite] (client) hmr update /src/components/TasksView.tsx
+9:42:13 AM [vite] (client) hmr update /src/components/AssignmentArchive.tsx, /src/components/TasksView.tsx, /src/components/TriageView.tsx, /src/components/LeftNavigation.tsx
+9:42:21 AM [vite] (client) hmr update /src/components/AssignmentCards.tsx
+9:42:27 AM [vite] (client) hmr update /src/components/AssignmentCards.tsx

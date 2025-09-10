@@ -828,13 +828,22 @@ html {
     border-radius: 0.75rem;                /* keep your rounded-2xl feel */
   }
 
-  /* Hover/focus outline follows the status color */
+  /* Improve base rendering and prevent visual overflow */
+  .status-accent-card{
+    position: relative;
+    overflow: hidden;                 /* keep hover effects inside the card */
+    will-change: transform, box-shadow;
+    transform: translateZ(0);         /* avoid sub‑pixel borders while scaling */
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+
+  /* Hover/focus: subtle lift + scale, no black outline */
   .status-accent-card:hover,
   .status-accent-card:focus-within{
-    /* subtle inner outline + soft elevation */
-    box-shadow:
-      0 0 0 2px color-mix(in oklab, var(--status-color) 36%, transparent) inset,
-      0 8px 18px rgba(0,0,0,.06);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 10px 24px -6px rgba(0,0,0,.12), 0 0 0 1px color-mix(in oklab, var(--status-color) 35%, transparent);
+    border-color: color-mix(in oklab, var(--status-color) 25%, var(--border));
   }
 
   /* "Active/expanded/selected" state if you need a stronger callout */
@@ -854,9 +863,9 @@ html {
   /* Dark mode tweaks (optional) */
   :root.dark .status-accent-card:hover,
   :root.dark .status-accent-card:focus-within{
-    box-shadow:
-      0 0 0 2px color-mix(in oklab, var(--status-color) 50%, transparent) inset,
-      0 10px 20px rgba(0,0,0,.35);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 10px 28px -8px rgba(0,0,0,.45), 0 0 0 1px color-mix(in oklab, var(--status-color) 45%, transparent);
+    border-color: color-mix(in oklab, var(--status-color) 30%, var(--border));
   }
 
   /* Card severity accent */
@@ -865,20 +874,16 @@ html {
     border-left-color: var(--accent, #e5e7eb); /* default muted */
   }
 
-  /* Hover outline that picks up the same accent color */
+  /* Dynamic hover helper with no outlines; keep color linkage */
   .dynamic-card-hover {
-    transition: box-shadow .2s ease, transform .2s ease, outline-color .2s ease;
+    transition: box-shadow .2s ease, transform .2s ease;
+    position: relative;
+    overflow: hidden;
   }
-  .dynamic-card-hover:hover {
-    outline: 2px solid var(--accent, rgba(0,0,0,0.08));
-    outline-offset: 0;
-    box-shadow: 0 6px 24px rgba(0,0,0,.06);
-  }
-
-  /* Optional: subtle glow on focus-within */
+  .dynamic-card-hover:hover,
   .dynamic-card-hover:focus-within {
-    outline: 2px solid var(--accent, rgba(0,0,0,0.1));
-    outline-offset: 0;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 20px -6px rgba(0,0,0,.12), 0 0 0 1px color-mix(in oklab, var(--accent, var(--status-color)) 30%, transparent);
   }
 
   /* ===== MIRA OPS DESIGN SYSTEM ===== */
@@ -917,19 +922,16 @@ html {
     border-radius: 16px;
     border-left-width: 4px;
     border-left-color: var(--accent, var(--border-default));
-    transition: box-shadow 0.2s ease, transform 0.2s ease, outline-color 0.2s ease;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
     box-shadow: var(--elevation-card);
+    overflow: hidden;                 /* prevent internal hover overflow */
+    will-change: transform, box-shadow;
   }
   
-  .mira-accent-card:hover {
-    outline: 2px solid var(--accent, rgba(0, 0, 0, 0.08));
-    outline-offset: 0;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
-  }
-  
+  .mira-accent-card:hover,
   .mira-accent-card:focus-within {
-    outline: 2px solid var(--accent, rgba(0, 0, 0, 0.1));
-    outline-offset: 0;
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 22px -6px rgba(0, 0, 0, 0.12), 0 0 0 1px color-mix(in oklab, var(--accent) 30%, transparent);
   }
   
   .mira-accent-card[data-state="disabled"] {
