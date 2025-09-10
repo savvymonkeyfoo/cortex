@@ -2,6 +2,7 @@ import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { AssignmentCard as NewAssignmentCard } from "./AssignmentCards";
 import type { Assignment, AssignmentStatus } from "../types/assignment";
+import { SYSTEM_USER_ID } from "../constants";
 
 // Legacy assignment card component for backward compatibility
 export function AssignmentCard({
@@ -77,7 +78,7 @@ export function convertLegacyToAssignment(legacy: any): Assignment {
     description: legacy.description,
     status: (legacy.status?.toLowerCase() || 'in_progress') as AssignmentStatus,
     priority: legacy.priority || 'medium',
-    createdBy: { id: 'system', name: 'System' },
+    createdBy: { id: SYSTEM_USER_ID, name: 'System' },
     assignees: legacy.assignees || [],
     tags: legacy.tags || [],
     dueAt: legacy.due_date,

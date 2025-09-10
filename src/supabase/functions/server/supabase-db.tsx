@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.39.0';
 import type { DatabaseAssignment, TriageAssignment } from '../../../types/assignment.ts';
+import { SYSTEM_USER_ID } from '../../../constants.ts';
 
 // Initialize Supabase client for server-side operations with graceful fallback
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -144,7 +145,7 @@ export async function updateSupabaseAssignment(id: string, updates: Partial<Data
         status: updateData.status || 'todo',
         priority: updateData.priority || 'medium',
         progress: updateData.progress !== undefined ? updateData.progress : 0,
-        created_by: updateData.created_by || 'system',
+        created_by: updateData.created_by || SYSTEM_USER_ID,
         created_at: updateData.created_at || new Date().toISOString(),
         assignee: updateData.assignee || null,
         // Optional fields with safe defaults
@@ -224,7 +225,7 @@ export async function updateSupabaseAssignment(id: string, updates: Partial<Data
         status: updateData.status || 'todo',
         priority: updateData.priority || 'medium',
         progress: updateData.progress !== undefined ? updateData.progress : 0,
-        created_by: updateData.created_by || 'system',
+        created_by: updateData.created_by || SYSTEM_USER_ID,
         created_at: updateData.created_at || new Date().toISOString(),
         assignee: updateData.assignee || null,
         // Safe defaults for all optional fields
@@ -428,7 +429,7 @@ export async function seedLiveAssignments() {
         status: 'in_progress',
         priority: 'high',
         progress: 45,
-        created_by: 'system',
+        created_by: SYSTEM_USER_ID,
         estimated_hours: 16,
         assignee: 'Database Team'
       },
@@ -438,7 +439,7 @@ export async function seedLiveAssignments() {
         status: 'review',
         priority: 'medium',
         progress: 90,
-        created_by: 'system',
+        created_by: SYSTEM_USER_ID,
         estimated_hours: 12,
         assignee: 'Backend Team'
       },
@@ -448,7 +449,7 @@ export async function seedLiveAssignments() {
         status: 'todo',
         priority: 'high',
         progress: 0,
-        created_by: 'system',
+        created_by: SYSTEM_USER_ID,
         estimated_hours: 20,
         assignee: 'DevOps Team'
       },
@@ -458,7 +459,7 @@ export async function seedLiveAssignments() {
         status: 'in_progress',
         priority: 'critical',
         progress: 75,
-        created_by: 'system',
+        created_by: SYSTEM_USER_ID,
         estimated_hours: 8,
         assignee: 'Security Team'
       },
@@ -468,7 +469,7 @@ export async function seedLiveAssignments() {
         status: 'todo',
         priority: 'medium',
         progress: 10,
-        created_by: 'system',
+        created_by: SYSTEM_USER_ID,
         estimated_hours: 6,
         assignee: 'Network Team'
       },
@@ -478,7 +479,7 @@ export async function seedLiveAssignments() {
         status: 'review',
         priority: 'medium',
         progress: 100,
-        created_by: 'system',
+        created_by: SYSTEM_USER_ID,
         estimated_hours: 4,
         assignee: 'Database Team'
       }

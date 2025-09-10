@@ -9,7 +9,7 @@ export interface Assignment {
   status: TaskStatus;
   priority: TaskPriority;
   progress: number; // 0..100
-  created_by: string; // user id or 'system'
+  created_by: string; // user id (UUID)
   created_at: string;
   assignees?: string[]; // assignee IDs
   tags?: string[];
