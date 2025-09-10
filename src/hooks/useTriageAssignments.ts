@@ -77,49 +77,23 @@ export function useTriageAssignments() {
           console.log("No active session found, attempting direct query...");
         }
 
-        // 2) Query the invoker view or assignments table
-        // Try triage views first, fall back to assignments
-        let data, error;
-        
-        try {
-          // Try the triage queue details view first
-          const result = await supabase
-            .from("v_triage_queue_details")
-            .select("*")
-            .order("created_at", { ascending: false });
-          data = result.data;
-          error = result.error;
-        } catch (viewError) {
-          console.log("Triage view not available, trying assignments table...");
-          
-          // Fall back to assignments table with review status filter
-          const result = await supabase
-            .from("assignments")
-            .select(`
-              id,
-              title,
-              description,
-              status,
-              assignee,
-              created_at,
-              updated_at
-            `)
-            .in("status", ["review", "awaiting_review", "needs_review", "waiting_review"])
-            .order("created_at", { ascending: false });
-          
-          // Transform to DBRow format
-          data = result.data?.map(row => ({
-            id: row.id,
-            assignment_id: row.id,
-            owner_id: "system", // default for demo
-            status: row.status,
-            created_at: row.created_at,
-            updated_at: row.updated_at || row.created_at,
-            title: row.title,
-            assignees: row.assignee ? [row.assignee] : null,
-          }));
-          error = result.error;
-        }
+        // 2) Query the assignments view
+        const { data: raw, error } = await supabase
+          .from("v_assignments_full")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        const data: DBRow[] | undefined = raw?.map((row) => ({
+          id: row.id,
+          assignment_id: row.assignment_id,
+          owner_id: row.owner_id,
+          status: row.status,
+          created_at: row.created_at,
+          updated_at: row.updated_at,
+          title: row.title,
+          assignees: row.assignees,
+          detail: row.detail,
+        }));
 
         if (error) {
           // Common RLS outcomes
