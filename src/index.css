@@ -6573,24 +6573,29 @@
   }
 
   .nav-item-hover {
-    background-color: #0000 !important;
-    border: none !important;
-    transition: all .2s cubic-bezier(.4, 0, .2, 1) !important;
+    background-color: transparent;
+    border: none;
+    transition: all .2s cubic-bezier(.4, 0, .2, 1);
   }
 
   .nav-item-hover:hover {
-    background-color: var(--secondary) !important;
-    color: var(--secondary-foreground) !important;
-    border-color: #0000 !important;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    border-color: transparent;
   }
 
   .nav-item-hover:hover svg {
-    color: var(--secondary-foreground) !important;
+    color: var(--secondary-foreground);
+  }
+
+  .nav-item-hover:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 
   .nav-item-hover:hover, .chat-settings-button:hover, button[class*="nav"]:hover, [class*="menu"]:hover, [class*="purple"]:hover, [style*="purple"]:hover, [style*="#9C27B0"]:hover, [style*="#8E24AA"]:hover {
-    background-color: var(--secondary) !important;
-    color: var(--secondary-foreground) !important;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
   }
 
   .status-accent-card {
@@ -6634,7 +6639,7 @@
 
   .status-accent {
     border-left-color: var(--accent, #e5e7eb);
-    border-left-width: 4px !important;
+    border-left-width: 4px;
   }
 
   .dynamic-card-hover {
@@ -7358,9 +7363,9 @@ html {
     min-height: 20px;
     max-height: 120px;
     overflow-y: auto;
-    outline: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    outline: none;
+    margin: 0;
+    padding: 0;
   }
 
   .ProseMirror .mention {
@@ -7422,19 +7427,19 @@ html {
     gap: calc(var(--spacing) * 1.5);
     border-radius: var(--radius);
     padding-inline: calc(var(--spacing) * 3);
-    color: var(--foreground) !important;
-    background: none !important;
-    border: none !important;
-    transition: all .2s cubic-bezier(.4, 0, .2, 1) !important;
+    color: var(--foreground);
+    background: none;
+    border: none;
+    transition: all .2s cubic-bezier(.4, 0, .2, 1);
   }
 
   .chat-settings-button:hover {
-    background-color: var(--secondary) !important;
-    color: var(--secondary-foreground) !important;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
   }
 
   .chat-settings-button:hover svg {
-    color: var(--secondary-foreground) !important;
+    color: var(--secondary-foreground);
   }
 }
 

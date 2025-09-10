@@ -594,7 +594,7 @@ export function LeftNavigation({
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0 hover:bg-secondary"
+                                        className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0"
                                         onClick={(e) => e.stopPropagation()}
                                         aria-label="Workspace options"
                                       >
@@ -674,8 +674,9 @@ export function LeftNavigation({
                                             <Button
                                               variant="ghost"
                                               size="sm"
-                                              className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0 hover:bg-secondary"
+                                              className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0"
                                               onClick={(e) => e.stopPropagation()}
+                                              aria-label="Task space options"
                                             >
                                               {mutating ? (
                                                 <div className="h-3 w-3 animate-spin rounded-full border border-foreground border-t-transparent" />
@@ -845,8 +846,9 @@ export function LeftNavigation({
                                       <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0 hover:bg-secondary"
+                                        className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0"
                                         onClick={(e) => e.stopPropagation()}
+                                        aria-label="Task menu"
                                       >
                                         {mutating ? (
                                           <div className="h-3 w-3 animate-spin rounded-full border border-foreground border-t-transparent" />
