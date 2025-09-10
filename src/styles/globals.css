@@ -785,37 +785,42 @@ html {
   
   /* Global Navigation Menu Item Hover - Enforced across all menus */
   .nav-item-hover {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    background-color: transparent !important;
-    border: none !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: transparent;
+    border: none;
   }
-  
+
   .nav-item-hover:hover {
-    background-color: var(--secondary) !important;
-    color: var(--secondary-foreground) !important;
-    border-color: transparent !important;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    border-color: transparent;
   }
-  
+
   .nav-item-hover:hover svg {
-    color: var(--secondary-foreground) !important;
+    color: var(--secondary-foreground);
   }
-  
+
+  .nav-item-hover:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
   /* Remove all purple hover states globally */
   .nav-item-hover:hover,
   .chat-settings-button:hover,
   button[class*="nav"]:hover,
   [class*="menu"]:hover {
-    background-color: var(--secondary) !important;
-    color: var(--secondary-foreground) !important;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
   }
-  
+
   /* Ensure no purple backgrounds in any menu items */
   *[class*="purple"]:hover,
   *[style*="purple"]:hover,
   *[style*="#9C27B0"]:hover,
   *[style*="#8E24AA"]:hover {
-    background-color: var(--secondary) !important;
-    color: var(--secondary-foreground) !important;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
   }
 
   /* Status-accented cards */
@@ -870,7 +875,7 @@ html {
 
   /* Card severity accent */
   .status-accent {
-    border-left-width: 4px !important;
+    border-left-width: 4px;
     border-left-color: var(--accent, #e5e7eb); /* default muted */
   }
 
@@ -1404,9 +1409,9 @@ html {
 
   /* TipTap Editor Enhancements for Chat */
   .ProseMirror {
-    outline: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    outline: none;
+    padding: 0;
+    margin: 0;
     min-height: 20px;
     max-height: 120px;
     overflow-y: auto;
@@ -1469,19 +1474,19 @@ html {
   /* Global Menu Button - Uses standardized nav-item-hover behavior */
   .chat-settings-button {
     @apply h-8 rounded-md gap-1.5 px-3;
-    background: transparent !important;
-    color: var(--foreground) !important;
-    border: none !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: transparent;
+    color: var(--foreground);
+    border: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .chat-settings-button:hover {
-    background-color: var(--secondary) !important;
-    color: var(--secondary-foreground) !important;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
   }
-  
+
   .chat-settings-button:hover svg {
-    color: var(--secondary-foreground) !important;
+    color: var(--secondary-foreground);
   }
 }
 

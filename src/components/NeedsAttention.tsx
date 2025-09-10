@@ -103,29 +103,57 @@ function ChatMessages({ messages, className = "" }: { messages: Array<{id: strin
               {message.sender === 'agent' ? (
                 // Agent message icons
                 <>
-                  <button className="p-1 hover:bg-muted rounded transition-colors duration-200" title="Like">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    title="Like"
+                    aria-label="Like"
+                  >
                     <ThumbsUp className="w-3 h-3 text-muted-foreground hover:text-ai-success" />
                   </button>
-                  <button className="p-1 hover:bg-muted rounded transition-colors duration-200" title="Dislike">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    title="Dislike"
+                    aria-label="Dislike"
+                  >
                     <ThumbsDown className="w-3 h-3 text-muted-foreground hover:text-destructive" />
                   </button>
-                  <button className="p-1 hover:bg-muted rounded transition-colors duration-200" title="Copy">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    title="Copy"
+                    aria-label="Copy"
+                  >
                     <Copy className="w-3 h-3 text-muted-foreground hover:text-ai-primary" />
                   </button>
-                  <button className="p-1 hover:bg-muted rounded transition-colors duration-200" title="Bookmark">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    title="Bookmark"
+                    aria-label="Bookmark"
+                  >
                     <Bookmark className="w-3 h-3 text-muted-foreground hover:text-ai-accent" />
                   </button>
                 </>
               ) : (
                 // User message icons
                 <>
-                  <button className="p-1 hover:bg-muted rounded transition-colors duration-200" title="Edit">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    title="Edit"
+                    aria-label="Edit"
+                  >
                     <Edit className="w-3 h-3 text-muted-foreground hover:text-ai-secondary" />
                   </button>
-                  <button className="p-1 hover:bg-muted rounded transition-colors duration-200" title="Copy">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    title="Copy"
+                    aria-label="Copy"
+                  >
                     <Copy className="w-3 h-3 text-muted-foreground hover:text-ai-primary" />
                   </button>
-                  <button className="p-1 hover:bg-muted rounded transition-colors duration-200" title="Delete">
+                  <button
+                    className="p-1 hover:bg-muted rounded transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    title="Delete"
+                    aria-label="Delete"
+                  >
                     <Trash2 className="w-3 h-3 text-muted-foreground hover:text-destructive" />
                   </button>
                 </>

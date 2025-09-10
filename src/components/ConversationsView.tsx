@@ -914,8 +914,9 @@ export function ConversationsView({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0 hover:bg-secondary"
+                    className="h-5 w-5 p-0 nav-item-hover bg-transparent border-0"
                     onClick={(e) => e.stopPropagation()}
+                    aria-label="Conversation options"
                   >
                     <MoreHorizontal className="h-3 w-3 text-foreground" />
                   </Button>

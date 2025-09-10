@@ -68,13 +68,13 @@ export function ConnectivityDebugger() {
   };
 
   return (
-    <Card className="border-orange-200 bg-orange-50 dark:bg-orange-950/20 dark:border-orange-800">
+    <Card className="border-ai-primary bg-ai-primary/10 dark:bg-ai-primary/20 dark:border-ai-primary">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-orange-700 dark:text-orange-300">
+        <CardTitle className="flex items-center gap-2 text-ai-primary">
           <AlertTriangle className="h-5 w-5" />
           Network Connectivity Debugger
         </CardTitle>
-        <CardDescription className="text-orange-600 dark:text-orange-400">
+        <CardDescription className="text-ai-primary">
           Diagnose server connectivity issues and network problems
         </CardDescription>
       </CardHeader>
@@ -85,7 +85,7 @@ export function ConnectivityDebugger() {
             onClick={runConnectivityTest}
             disabled={isRunning}
             size="sm"
-            className="bg-orange-600 hover:bg-orange-700 text-white"
+            className="bg-ai-primary-accessible hover:bg-ai-primary/90"
           >
             {isRunning ? "Testing..." : "Run Full Diagnostics"}
           </Button>
@@ -95,7 +95,7 @@ export function ConnectivityDebugger() {
             disabled={isRunning}
             size="sm"
             variant="outline"
-            className="border-orange-300 text-orange-700 hover:bg-orange-100"
+            className="border-ai-primary text-ai-primary hover:bg-ai-primary/10"
           >
             Quick Console Test
           </Button>
